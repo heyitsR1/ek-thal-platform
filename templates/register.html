@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - EkThal</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <span class="logo">EkThal</span>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/register/" class="cta">Register</a>
+                <a href="/login/">Login</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <h2>Register</h2>
+        {% if error %}
+            <div style="background: #f8d7da; color: #721c24; padding: 1em; border-radius: 5px; margin-bottom: 1em;">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+            <div style="background: #d4edda; color: #155724; padding: 1em; border-radius: 5px; margin-bottom: 1em;">Registration successful! You can now <a href='/login/'>login</a>.</div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label>Username: <input type="text" name="username" required></label><br>
+            <label>Email: <input type="email" name="email" required></label><br>
+            <label>Password: <input type="password" name="password" required></label><br>
+            <label>Confirm Password: <input type="password" name="password2" required></label><br>
+            <label>Phone Number 1: <input type="text" name="phone_number_1" required></label><br>
+            <label>Phone Number 2: <input type="text" name="phone_number_2" required></label><br>
+            <label> Register as Organization/Receiver<input type="checkbox" name="is_organization"></label><br>
+            <button type="submit">Register</button>
+        </form>
+    </main>
+</body>
+</html> 
