@@ -21,9 +21,11 @@ def home(request):
     return render(request, 'index.html')
 def about(request):
     return render(request, 'about.html')
+def signup(request):
+    return render(request, 'signup.html')
+
 def contact(request):
     return render(request, 'contact.html')
-
 @csrf_protect
 def register(request):
     if request.method == 'POST':
@@ -287,3 +289,9 @@ def admin_approve_listing(request, listing_id):
         listing.save()
         return redirect('admin_pending_listings')
     return render(request, 'admin_approve_listing.html', {'listing': listing})
+
+def register_individual(request):
+    return render(request, 'register_individual.html')
+
+def register_organization(request):
+    return render(request, 'register_organization.html')

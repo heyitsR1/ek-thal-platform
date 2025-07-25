@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'register.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+  <div class="signup-card">
+    <div class="signup-header">
+      Sign up
+    </div>
+    <div class="signup-subtitle">
+      Start your Journey as a
+    </div>
+    <div class="signup-options">
+      <a href="{% url 'register_individual' %}" class="signup-btn">
+        <span class="signup-icon">
+          <!-- Individual SVG -->
+          <img src="{% static 'individual.svg' %}" alt="Individual" />
+        </span>
+        Individual
+      </a>
+      <a href="{% url 'register_organization' %}" class="signup-btn">
+        <span class="signup-icon">
+          <!-- Organization SVG -->
+          <img src="{% static 'organization.svg' %}" alt="Organization" />
+        </span>
+        Organization
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
