@@ -176,8 +176,9 @@ body {
 }
 
 .wave-buttons {
-  position: relative;       /* No absolute positioning */
-  margin-top: 0.15 rem;         /* Space below the hands */
+  position: absolute;     
+  bottom: 1%;       /* Adjust relative to hands */
+  left: 40%; 
   display: flex;
   justify-content: center;
   gap: 2rem;
