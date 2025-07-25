@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EkThal - Food Donation Platform{% endblock %}</title>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">EkThal</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            {% if user.is_authenticated %}
+                <a href="/logout/">Logout</a>
+            {% else %}
+                <a href="/login/">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+    <footer>
+        &copy; {{ year|default:2024 }} EkThal &mdash; Spreading Smiles, Not Waste.
+    </footer>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
