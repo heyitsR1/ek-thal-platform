@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About{% endblock title %}
+{% block content %}
+<div class="ekthaal-hero">
+    <div class="ekthaal-hero-text">
+      <div class="ekthaal-hindi-title">
+        <span class="hindi-question">के हो?</span>
+        <span class="ekthaal-title">EK THAAL</span>
+      </div>
+      <p class="ekthaal-desc">
+        Ek Thal is a community-driven food-sharing platform that connects those with surplus food to those who need it.<br>
+        Our mission is simple – reduce food waste and spread kindness, one plate at a time.<br>
+        What’s extra for you could mean a full meal for someone else.
+      </p>
+    </div>
+    <div class="ekthaal-hero-img">
+      <img src="{% static 'final.jpg' %}" alt="Hand giving food plate" />
+    </div>
+  </div>
+{% endblock content %}
+
