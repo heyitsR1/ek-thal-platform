@@ -18,6 +18,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  padding: 0;
 }
 
 /* Header */
@@ -159,6 +161,27 @@ body {
   background: #fdba74;
 }
 
+/* Read More Button */
+.readmore-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.6rem;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  cursor: pointer;
+}
+.readmore-btn:hover {
+  background: #fb923c;
+  color: #fff;
+}
+
 /* Wave section */
 .wave-container {
   position: relative;
@@ -167,13 +190,14 @@ body {
   z-index: 0;
 }
 .wave-svg {
-  transform: translateY(10%);
+  transform: translateY(-4%);
   width: 100%;
   height: 30%;
   display: block;
   position: relative;
   z-index: 0;
-}
+  object-fit: cover;
+  }
 
 .wave-buttons {
   position: relative;       /* No absolute positioning */
@@ -265,5 +289,219 @@ footer {
   main {
     margin: 1rem 0 0 0;
     padding: 0 0.5rem;
+  }
+}
+
+
+/* Ek Thaal Intro Section Styling */
+.ekthaal-intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2.5rem auto 0 auto;
+  padding: 0 2.5rem 0 3.5rem; /* More left padding for text, less right */
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+  z-index: 10;
+}
+
+.ekthaal-text {
+  flex: 1 1 0;
+  min-width: 320px;
+  max-width: 420px;
+  margin-left: 0; /* Remove margin-left */
+}
+
+.ekthaal-heading-nep {
+  font-family: 'Noto Sans Devanagari', serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #dc2626;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.02em;
+  text-shadow: 2px 2px 0 #fff, 3px 3px 0 #fb923c33;
+  line-height: 1.1;
+}
+
+.ekthaal-heading-en {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #fb923c;
+  letter-spacing: 0.13em;
+  margin-bottom: 1.3rem;
+  line-height: 1.1;
+}
+
+.ekthaal-desc {
+  color: #388e3c;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+  max-width: 420px;
+}
+
+.ekthaal-illustration {
+  flex: 1 1 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
+  margin-left: 0;
+  position: relative;
+  right: 0;
+}
+
+.ekthaal-svg {
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;   /* Pushes SVG to the right edge */
+  margin-top: 0;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.07));
+}
+
+@media (max-width: 900px) {
+  .ekthaal-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+  .ekthaal-text {
+    max-width: 100%;
+  }
+  .ekthaal-illustration {
+    width: 100%;
+    max-width: 320px;
+    justify-content: flex-start;
+    margin-top: 1.5rem;
+  }
+}
+
+
+/* Green footer below About Us */
+/* filepath: d:\Assignments\ek-thal\static\styles.css */
+.custom-green-footer {
+  background: #388e3c; /* Same as --secondary */
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem 0;
+  font-size: 1.05rem;
+  margin-top: 0;
+  width: 100%;
+  z-index: 20;
+}
+
+/* Minimalist Ek Thal Footer */
+/* filepath: d:\Assignments\ek-thal\static\styles.css */
+.ekthaal-minimal-footer {
+  background: #388e3c;
+  border-top: 1px solid #2e6d2a;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 2.5rem;
+  width: 100%;
+  box-shadow: 0 0 8px 0 rgba(56,142,60,0.04);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.ekthaal-minimal-footer .footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.2rem 2rem 0.5rem 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 180px;
+}
+.footer-logo {
+  font-family: 'Noto Sans Devanagari', serif;
+  font-size: 1.35rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+.footer-tagline {
+  font-size: 0.98rem;
+  color: #fb923c;
+  margin-top: 0.1rem;
+  font-weight: 500;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 2.2rem;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 220px;
+}
+.footer-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.2s;
+  letter-spacing: 0.01em;
+}
+.footer-nav a:hover {
+  color: #fb923c;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+  min-width: 90px;
+}
+.footer-social a svg {
+  display: block;
+  transition: transform 0.2s;
+  fill: #fff; /* Make icons white */
+}
+.footer-social a:hover svg {
+  transform: scale(1.15);
+  opacity: 0.85;
+  fill: #fb923c; /* Optional: orange accent on hover */
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.93rem;
+  color: #fff;
+  border-top: 1px solid #2e6d2a;
+  margin-top: 0.7rem;
+  padding: 0.5rem 0 0.7rem 0;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 800px) {
+  .ekthaal-minimal-footer .footer-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+    padding: 1.2rem 1rem 0.5rem 1rem;
+  }
+  .footer-nav {
+    justify-content: flex-start;
+    gap: 1.2rem;
+    margin: 0.7rem 0;
+  }
+  .footer-social {
+    justify-content: flex-start;
+    margin-bottom: 0.5rem;
   }
 }
