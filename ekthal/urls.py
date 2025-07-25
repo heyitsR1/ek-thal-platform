@@ -30,4 +30,13 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("register_individual/", views.register_individual, name="register_individual"),
     path("register_organization/", views.register_organization, name="register_organization"),
+    path("food_listing_form/", views.food_listing_form, name="food_listing_form"),
+    path("thank_you/", views.thank_you, name="thank_you"),
+    path("listings/", views.listings, name="listings"),
+    path("listing/<int:listing_id>/", views.listing_detail, name="listing_detail"),
+    path("claim/<int:listing_id>/", views.claim_listing, name="claim_listing"),
+    path("connection/<int:claimed_listing_id>/", views.connection_page, name="connection_page"),
+    path("receiver_dashboard/", views.receiver_dashboard, name="receiver_dashboard"),
+    path("dashboard/pending-listings/", views.dashboard_pending_listings, name="dashboard_pending_listings"),
+    path("dashboard/approve-listing/<int:listing_id>/", views.dashboard_approve_listing, name="dashboard_approve_listing"),
 ]

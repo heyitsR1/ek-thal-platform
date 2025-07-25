@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}My Claimed Listings - EkThal{% endblock %}
+
+{% block content %}
+    <nav>
+        <div class="navbar">
+            <span class="logo">EkThal</span>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/receiver/">Receiver Portal</a>
+                <a href="/receiver/dashboard/" class="cta">My Claimed Listings</a>
+                <a href="/logout/">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <h2>My Claimed Listings</h2>
+        <div class="listings">
+            {% for claim in claimed %}
+                <div class="listing-card">
+                    {% if claim.food_listing.image %}
+                        <img src="{{ claim.food_listing.image.url }}" alt="Food Image" class="listing-img" style="max-width:200px; max-height:150px;">
+                    {% endif %}
+                    <h3>{{ claim.food_listing.title }}</h3>
+                    <p><strong>Location:</strong> {{ claim.food_listing.location }}</p>
+                    <p><strong>Quantity:</strong> {{ claim.food_listing.quantity }}</p>
+                    <p><strong>Type:</strong> {{ claim.food_listing.type_of_food }}</p>
+                    <p><strong>Best Before:</strong> {{ claim.food_listing.best_before }}</p>
+                    <p><strong>Description:</strong> {{ claim.food_listing.description }}</p>
+                    <p><strong>Claimed At:</strong> {{ claim.claimed_at }}</p>
+                    <a href="/connection/{{ claim.id }}/" class="cta-main" style="margin-top:0.5em; display:inline-block;">View Connection</a>
+                </div>
+            {% empty %}
+                <p>You have not claimed any listings yet.</p>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}

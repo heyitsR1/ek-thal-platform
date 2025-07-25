@@ -64,18 +64,26 @@ class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 @csrf_protect
 def login_view(request):
+    if request.user.is_authenticated:
+        try:
+            profile = Profile.objects.get(user=request.user)
+            if profile.is_receiver:
+                return redirect('listings')
+            else:
+                return redirect('food_listing_form')
+        except Profile.DoesNotExist:
+            pass
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # Ensure Profile exists for this user
             try:
                 profile = Profile.objects.get(user=user)
             except Profile.DoesNotExist:
-                profile = Profile.objects.create(user=user, phone_number_1='', phone_number_2='', is_organization=False)
-            if profile.is_organization:
+                profile = Profile.objects.create(user=user, phone_number_1='', phone_number_2='', is_organization=False, is_receiver=False)
+            if profile.is_receiver:
                 return redirect('listings')
             else:
                 return redirect('food_listing_form')
@@ -85,7 +93,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('landing_page')
+    return redirect('home')
 
 @login_required
 def food_listing_form(request):
@@ -273,12 +281,12 @@ def connection_page(request, claimed_listing_id):
     })
 
 @staff_member_required
-def admin_pending_listings(request):
+def dashboard_pending_listings(request):
     pending = FoodListing.objects.filter(status='pending').order_by('-created_at')
-    return render(request, 'admin_pending_listings.html', {'pending': pending})
+    return render(request, 'dashboard_pending_listings.html', {'pending': pending})
 
 @staff_member_required
-def admin_approve_listing(request, listing_id):
+def dashboard_approve_listing(request, listing_id):
     listing = get_object_or_404(FoodListing, id=listing_id)
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -287,11 +295,57 @@ def admin_approve_listing(request, listing_id):
         elif action == 'reject':
             listing.status = 'rejected'
         listing.save()
-        return redirect('admin_pending_listings')
-    return render(request, 'admin_approve_listing.html', {'listing': listing})
+        return redirect('dashboard_pending_listings')
+    return render(request, 'dashboard_approve_listing.html', {'listing': listing})
 
 def register_individual(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        phone_number_1 = request.POST.get('phone_number_1')
+        phone_number_2 = request.POST.get('phone_number_2')
+        role = request.POST.get('role')
+        is_organization = False
+        is_receiver = (role == 'receiver')
+        if not (username and password and password2 and email and phone_number_1 and phone_number_2 and role):
+            return render(request, 'register_individual.html', {'error': 'All fields are required.'})
+        if password != password2:
+            return render(request, 'register_individual.html', {'error': 'Passwords do not match.'})
+        if User.objects.filter(username=username).exists():
+            return render(request, 'register_individual.html', {'error': 'Username already exists.'})
+        user = User.objects.create_user(username=username, password=password, email=email)
+        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization, is_receiver=is_receiver)
+        return render(request, 'register_individual.html', {'success': True})
     return render(request, 'register_individual.html')
 
 def register_organization(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        phone_number_1 = request.POST.get('phone_number_1')
+        phone_number_2 = request.POST.get('phone_number_2')
+        role = request.POST.get('role')
+        is_organization = True
+        is_receiver = (role == 'receiver')
+        if not (username and password and password2 and email and phone_number_1 and phone_number_2 and role):
+            return render(request, 'register_organization.html', {'error': 'All fields are required.'})
+        if password != password2:
+            return render(request, 'register_organization.html', {'error': 'Passwords do not match.'})
+        if User.objects.filter(username=username).exists():
+            return render(request, 'register_organization.html', {'error': 'Username already exists.'})
+        user = User.objects.create_user(username=username, password=password, email=email)
+        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization, is_receiver=is_receiver)
+        return render(request, 'register_organization.html', {'success': True})
     return render(request, 'register_organization.html')
+
+def user_profile_context(request):
+    if request.user.is_authenticated:
+        try:
+            return {'profile': Profile.objects.get(user=request.user)}
+        except Profile.DoesNotExist:
+            return {'profile': None}
+    return {'profile': None}

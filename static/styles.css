@@ -506,3 +506,211 @@ footer {
     margin-bottom: 0.5rem;
   }
 }
+
+/* Donation Form Styles */
+.form-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #f6f6f6;
+  border-radius: 24px;
+  box-shadow: 0 2px 16px rgba(67,146,73,0.08);
+  padding: 2rem 2.5rem;
+}
+.donation-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #166534;
+}
+.donation-form input,
+.donation-form textarea,
+.donation-form select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  background: #fff;
+}
+.donation-form button {
+  background: #439249;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.7rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.donation-form button:hover {
+  background: #388e3c;
+}
+.form-error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Thank You Page */
+.thankyou-container {
+  max-width: 500px;
+  margin: 3rem auto;
+  background: #e6f4ea;
+  border-radius: 24px;
+  box-shadow: 0 2px 16px rgba(67,146,73,0.08);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+.thankyou-container h2 {
+  color: #439249;
+  margin-bottom: 1rem;
+}
+.thankyou-container p {
+  color: #166534;
+  margin-bottom: 2rem;
+}
+
+/* Listings Page */
+.listings-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.filter-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.filter-form input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+.filter-form button {
+  background: #439249;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.listings-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.listing-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(67,146,73,0.07);
+  padding: 1.5rem 1.2rem;
+  min-width: 260px;
+  flex: 1 1 260px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.listing-card h3 {
+  color: #439249;
+  margin-bottom: 0.5rem;
+}
+
+/* Listing Detail */
+.listing-detail-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #f6f6f6;
+  border-radius: 24px;
+  box-shadow: 0 2px 16px rgba(67,146,73,0.08);
+  padding: 2rem 2.5rem;
+}
+.listing-detail-main {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+.listing-image {
+  max-width: 220px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(67,146,73,0.07);
+}
+.listing-info {
+  flex: 1;
+}
+.ai-summary, .ai-analysis {
+  background: #e6f4ea;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #166534;
+}
+
+/* Connection Page */
+.connection-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #f6f6f6;
+  border-radius: 24px;
+  box-shadow: 0 2px 16px rgba(67,146,73,0.08);
+  padding: 2rem 2.5rem;
+  text-align: center;
+}
+.connection-info {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+.rating-form label {
+  display: block;
+  margin-bottom: 1rem;
+  color: #166534;
+}
+.rating-form select, .rating-form textarea {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  background: #fff;
+}
+.rating-form button {
+  background: #439249;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.7rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.rating-form button:hover {
+  background: #388e3c;
+}
+.rating-success {
+  background: #e6f4ea;
+  color: #439249;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 700px) {
+  .listing-detail-main {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .form-container, .thankyou-container, .listing-detail-container, .connection-container {
+    padding: 1rem 0.5rem;
+  }
+}

@@ -6,6 +6,7 @@ from django.db import models
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_organization = models.BooleanField(default=False)
+    is_receiver = models.BooleanField(default=False)
     phone_number_1 = models.CharField(max_length=20)
     phone_number_2 = models.CharField(max_length=20, blank=True)
     # Add more fields as needed

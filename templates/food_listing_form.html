@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock %}
+{% block content %}
+<div class="form-container">
+  <h2>Donate Surplus Food</h2>
+  <form method="post" enctype="multipart/form-data" class="donation-form">
+    {% csrf_token %}
+    {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+    <label>Title*<input type="text" name="title" required></label>
+    <label>Location*<input type="text" name="location" required></label>
+    <label>Quantity (kg)*<input type="number" step="0.1" name="quantity" required></label>
+    <label>Type of Food*<input type="text" name="type_of_food" required></label>
+    <label>Description*<textarea name="description" required></textarea></label>
+    <label>Prepared At*<input type="datetime-local" name="prepared_at" required></label>
+    <label>Image<input type="file" name="image"></label>
+    <label>Phone Number 1*<input type="text" name="phone_number_1" value="{{ profile.phone_number_1 }}" required></label>
+    <label>Phone Number 2*<input type="text" name="phone_number_2" value="{{ profile.phone_number_2 }}" required></label>
+    <label><input type="checkbox" name="recurring"> Recurring Donation</label>
+    <label>Storage Instructions<input type="text" name="storage"></label>
+    <label>Prepared By<input type="text" name="prepared_by"></label>
+    <label>Special Instructions<textarea name="special_instructions"></textarea></label>
+    <label>Latitude<input type="text" name="latitude"></label>
+    <label>Longitude<input type="text" name="longitude"></label>
+    <button type="submit">Submit Donation</button>
+  </form>
+</div>
+{% endblock %} 

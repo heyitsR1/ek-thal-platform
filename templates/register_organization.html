@@ -5,8 +5,52 @@
   <link rel="stylesheet" href="{% static 'register_organization.css' %}">
 {% endblock %}
 
+
 {% block content %}
+<div class="container auth-page">
+  <div class="form-box">
+    <h2>Register</h2>
 
-<p>Register Organization</p>
+    {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+      <div class="alert alert-success">
+        Registration successful! You can now <a href="{% url 'login' %}">login</a>.
+      </div>
+    {% endif %}
 
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      <label>Username:
+        <input type="text" name="username" required>
+      </label>
+      <label>Email:
+        <input type="email" name="email" required>
+      </label>
+      <label>Password:
+        <input type="password" name="password" required>
+      </label>
+      <label>Confirm Password:
+        <input type="password" name="password2" required>
+      </label>
+      <label>Phone Number 1:
+        <input type="text" name="phone_number_1" required>
+      </label>
+      <label>Phone Number 2:
+        <input type="text" name="phone_number_2" required>
+      </label>
+      <label>Role:</label>
+      <label><input type="radio" name="role" value="donor" required> Donor</label>
+      <label><input type="radio" name="role" value="receiver" required> Receiver</label>
+ 
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+
+    <p class="switch-link">
+      Already have an account? <a href="{% url 'login' %}">Login</a>
+    </p>
+  </div>
+</div>
 {% endblock %}

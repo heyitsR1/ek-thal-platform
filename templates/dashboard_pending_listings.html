@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Pending Food Listings</h2>
+{% if pending %}
+  <ul>
+    {% for listing in pending %}
+      <li>
+        <b>{{ listing.title }}</b> ({{ listing.location }}, {{ listing.quantity }}kg) - <a href="{% url 'dashboard_approve_listing' listing.id %}">Review</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No pending listings.</p>
+{% endif %}
+{% endblock %} 

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Review Listing: {{ listing.title }}</h2>
+<p><b>Location:</b> {{ listing.location }}</p>
+<p><b>Quantity:</b> {{ listing.quantity }} kg</p>
+<p><b>Type:</b> {{ listing.type_of_food }}</p>
+<p><b>Description:</b> {{ listing.description }}</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" name="action" value="approve">Approve</button>
+  <button type="submit" name="action" value="reject">Reject</button>
+</form>
+<a href="{% url 'dashboard_pending_listings' %}">Back to Pending Listings</a>
+{% endblock %} 

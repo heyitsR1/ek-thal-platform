@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock %}
+{% block content %}
+<div class="listings-container">
+  <h2>Available Food Listings</h2>
+  <form method="get" class="filter-form">
+    <input type="text" name="type_of_food" placeholder="Type of Food" value="{{ food_type }}">
+    <input type="text" name="location" placeholder="Location" value="{{ location }}">
+    <button type="submit">Filter</button>
+  </form>
+  <div class="listings-list">
+    {% for listing in listings %}
+      <div class="listing-card">
+        <h3>{{ listing.title }}</h3>
+        <p><strong>Location:</strong> {{ listing.location }}</p>
+        <p><strong>Quantity:</strong> {{ listing.quantity }} kg</p>
+        <p><strong>Type:</strong> {{ listing.type_of_food }}</p>
+        <a href="{% url 'listing_detail' listing.id %}" class="readmore-btn">View Details</a>
+        {% if is_org and listing.id not in claimed_ids %}
+          <a href="{% url 'claim_listing' listing.id %}" class="claim-btn">Claim</a>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p>No listings found.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %} 
