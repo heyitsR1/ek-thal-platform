@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock %}
+{% block content %}
+<div class="connection-container">
+  <h2>Connection Established!</h2>
+  <div class="connection-info">
+    <h3>Listing: {{ listing.title }}</h3>
+    <p><strong>Donor:</strong> {{ donor.user.username }} ({{ donor.phone_number_1 }})</p>
+    <p><strong>Receiver:</strong> {{ receiver.user.username }} ({{ receiver.phone_number_1 }})</p>
+    <p><strong>Location:</strong> {{ listing.location }}</p>
+    <p><strong>Quantity:</strong> {{ listing.quantity }} kg</p>
+    <p><strong>Type:</strong> {{ listing.type_of_food }}</p>
+  </div>
+  {% if not already_rated %}
+    <form method="post" class="rating-form">
+      {% csrf_token %}
+      <label>Rate your experience:
+        <select name="score" required>
+          <option value="">Select</option>
+          <option value="5">5 - Excellent</option>
+          <option value="4">4 - Good</option>
+          <option value="3">3 - Okay</option>
+          <option value="2">2 - Bad</option>
+          <option value="1">1 - Terrible</option>
+        </select>
+      </label>
+      <label>Comment (optional):<textarea name="comment"></textarea></label>
+      <button type="submit">Submit Rating</button>
+    </form>
+  {% else %}
+    <div class="rating-success">Thank you for your feedback!</div>
+  {% endif %}
+  <a href="/receiver_dashboard/" class="readmore-btn">Back to Dashboard</a>
+</div>
+{% endblock %} 

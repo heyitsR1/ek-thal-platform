@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock %}
+{% block content %}
+<div class="listing-detail-container">
+  <h2>{{ listing.title }}</h2>
+  <div class="listing-detail-main">
+    {% if listing.image %}
+      <img src="{{ listing.image.url }}" alt="Food Image" class="listing-image">
+    {% endif %}
+    <div class="listing-info">
+      <p><strong>Location:</strong> {{ listing.location }}</p>
+      <p><strong>Quantity:</strong> {{ listing.quantity }} kg</p>
+      <p><strong>Type:</strong> {{ listing.type_of_food }}</p>
+      <p><strong>Description:</strong> {{ listing.description }}</p>
+      <p><strong>Prepared At:</strong> {{ listing.prepared_at }}</p>
+      <p><strong>Storage:</strong> {{ listing.storage }}</p>
+      <p><strong>Prepared By:</strong> {{ listing.prepared_by }}</p>
+      <p><strong>Special Instructions:</strong> {{ listing.special_instructions }}</p>
+      {% if ai_summary %}<div class="ai-summary">{{ ai_summary|safe }}</div>{% endif %}
+      {% if ai_analysis %}<div class="ai-analysis">{{ ai_analysis|safe }}</div>{% endif %}
+      {% if is_org and listing.id not in claimed_ids %}
+        <a href="{% url 'claim_listing' listing.id %}" class="claim-btn">Claim This Listing</a>
+      {% endif %}
+    </div>
+  </div>
+  <a href="{% url 'listings' %}" class="readmore-btn">Back to Listings</a>
+</div>
+{% endblock %} 
