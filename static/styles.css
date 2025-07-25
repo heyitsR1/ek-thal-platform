@@ -127,6 +127,7 @@ body {
   text-decoration: none;
   text-align: center;
   transition: background 0.2s;
+  margin-top: 10px;
 }
 
 /* Specific Buttons */
@@ -170,45 +171,47 @@ body {
   width: 100%;
   height: 30%;
   display: block;
+  position: relative;
+  z-index: 0;
 }
 
 .wave-buttons {
-  position: absolute;
-  left: 37%;
-  top: 38%;
+  position: relative;       /* No absolute positioning */
+  margin-top: 0.15 rem;         /* Space below the hands */
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+  justify-content: center;
+  gap: 2rem;
+  z-index: 6;               /* Stay above wave if needed */
 }
-@media (min-width: 768px) {
+
+@media (max-width: 768px) {
   .wave-buttons {
-    top: 42%;
-    flex-direction: row;
-    gap: 3rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
   }
 }
 
+
+
 /* Hands SVG */
 .hands-svg-container {
+  position: absolute;
+  bottom: 0;        /* Place it near the bottom over the wave */
+  left: 0;
+  width: 100vw;     /* Stretch across the full screen width */
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  position: relative;
-  z-index: 1;
+  z-index: 5;       /* Above wave */
+  pointer-events: none;
 }
+
 .hands-svg {
-  width: 200vw;
-  height: 200vh;
-  max-width: none;
-  max-height: none;
-  object-fit: contain;
-  display: block;
-  transform: scale(5) translateY(-55%);
+  width: 100vw;     /* Take full width of viewport */
+  height: auto;     /* Maintain aspect ratio */
+  object-fit: cover;
+  transform: translateY(20px); /* Adjust vertical alignment */
 }
 
 /* Messages */
