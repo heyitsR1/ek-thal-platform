@@ -1,0 +1,42 @@
+{% load static %}
+{%extends 'base.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ek Thaal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div>
+            <div class="logo-en">EK THAAL</div>
+            <div class="logo-nep">एक थाल</div>
+        </div>
+        <a href="#" class="login-btn">Login/ SignUp</a>
+    </header>
+
+    <div class="wave-buttons">
+        <a href="#" class="donate-btn">Donate Food</a>
+        <a href="#" class="claim-btn">Claim Food</a>
+    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="heading">POST. SHARE. CARE.</h1>
+        <p class="subheading">CONNECTING SURPLUS MEALS TO EMPTY PLATES ACROSS NEPAL."</p>
+    </main>
+    
+    <!-- SVG Wave -->
+    <div class="wave-container">
+        <svg viewBox="0 0 1439 712" fill="none" xmlns="http://www.w3.org/2000/svg" class="wave-svg">
+            <path d="M430.468 95.8733C197.141 -72.3814 -15.5 66.6588 -15.5 152.138V711H1435.41C1435.41 711 1441.91 420.659 1435.41 66.6588C1369.97 218.882 1268.6 310.733 1220.92 169.45C1160.66 -9.1396 1052.63 -25.1336 921.941 26.0832C863.546 48.9673 793.11 131.172 752.451 152.138C698.154 230.574 632.219 241.357 430.468 95.8733Z" fill="#439249"/>
+        </svg>
+        <div class="hands-svg-container">
+            <img src="img/hands_updated.svg" alt="Hands" class="hands-svg" />
+        </div>
+        <!-- Buttons on the wave -->
+    </div>
+</body>
+</html>
