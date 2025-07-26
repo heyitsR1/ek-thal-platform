@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Moonshine:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  background: #f8eedc;
+  font-family: 'Poppins', Arial, sans-serif;
+  color: #226b36;
+  margin: 0;
+  /* background: url("../static/aboutus.png") no-repeat center bottom fixed; */
+  padding: 0;
+  /* overflow: hidden; */
+}
+
+.aboutus-section {
+  background-size: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.aboutus-section::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url("../static/aboutus.png") no-repeat center bottom;
+  background-size: cover;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(6px);
+}
+
+.aboutus-title {
+  text-align: center;
+  font-size: 2.7rem;
+  color: #388e3c;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+  font-family: 'Moonshine', Arial, sans-serif;
+  font-weight: 600;
+}
+
+.aboutus-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start; /* Align items to the left */
+  gap: 40px;
+}
+
+.aboutus-text {
+  flex: 2 1 350px;
+  min-width: 300px;
+  font-size: 1.08rem;
+  color: #226b36;
+  line-height: 1.7;
+  text-align: left;
+  margin-right: 20px; /* Or set to 0 if you want no gap */
+}
+
+.aboutus-text p {
+  margin-bottom: 18px;
+}
+
+.aboutus-text a {
+  color: #226b36;
+  text-decoration: none; /* Remove underline */
+  font-weight: 500;
+}
+
+.aboutus-img {
+  align-items: center;
+  justify-content: center;
+}
+
+.aboutus-img img {
+  padding-top: 90px;
+  max-width: 300px;
+  width: 100%;
+  /* border-radius: 50%; */
+  
+  /* background: #fff; */
+  /* box-shadow: 0 2px 16px rgba(34, 107, 54, 0.08); */
+}
+
+.mission-section {
+  max-width: 1100px;
+  margin: 60px auto 0 auto;
+  padding: 0 20px 40px 20px;
+}
+
+.mission-title {
+  text-align: center;
+  font-size: 2.3rem;
+  color: #388e3c;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+  font-family: 'Moonshine', Arial, sans-serif;
+  font-weight: 600;
+}
+
+.mission-cards {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  flex-wrap: wrap;
+}
+
+.mission-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+}
+
+.mission-card img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 18px;
+  object-fit: contain;
+}
+
+.mission-card p {
+  font-size: 1.1rem;
+  color: #226b36;
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .aboutus-main {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .aboutus-img img {
+    max-width: 180px;
+  }
+  .mission-cards {
+    gap: 30px;
+  }
+}

@@ -9,9 +9,9 @@
 
 
 {% block content %}
-<div class="container auth-page">
+<div class="container auth-page" style= "background-color: #ffffff; padding: 20px; border-radius: 15px;">
   <div class="form-box">
-    <h2>Register</h2>
+    <h2>Organization Registration</h2>
 
     {% if error %}
       <div class="alert alert-error">{{ error }}</div>
@@ -24,6 +24,24 @@
 
     <form method="post" class="auth-form">
       {% csrf_token %}
+      <label>Organization Name:
+        <input type="text" name="organization_name" required>
+      </label>
+      <label>Organization Type:
+        <select name="organization_type" required>
+          <option value="">Select Organization Type</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="catering">Catering Service</option>
+          <option value="hotel">Hotel</option>
+          <option value="school">School/University</option>
+          <option value="office">Office/Corporate</option>
+          <option value="event">Event Organizer</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>Organization Address:
+        <textarea name="organization_address" required></textarea>
+      </label>
       <label>Username:
         <input type="text" name="username" required>
       </label>
@@ -48,7 +66,7 @@
 
       <!-- Leaflet map -->
       <div id="map" style="height: 300px; margin-bottom: 10px;"></div>
-      <button type="button" onclick="getLocation()">Choose My Current Location</button>
+      <button type="button" onclick="getLocation()" class = "btn-primary">Choose My Current Location</button>
       <br><br>
 
       <label>Role:</label>
@@ -61,62 +79,60 @@
 
       <button type="submit" class="btn">Register</button>
     </form>
-
-    <p class="switch-link">
-      Already have an account? <a href="{% url 'login' %}">Login</a>
-    </p>
   </div>
 </div>
 
 <script>
   // Initialize map
-  let map = L.map('map').setView([27.7103, 85.3222], 12); // Default: Kathmandu
+  var map = L.map('map').setView([27.7172, 85.3240], 10); // Default to Kathmandu
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
+    attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  let marker;
+  var marker = L.marker([27.7172, 85.3240]).addTo(map);
 
-  function setMarker(lat, lng) {
-      if (marker) map.removeLayer(marker);
-      marker = L.marker([lat, lng]).addTo(map);
-      document.getElementById('latitude').value = lat;
-      document.getElementById('longitude').value = lng;
-      reverseGeocode(lat, lng);
-  }
-
-  // Reverse Geocoding
-  function reverseGeocode(lat, lng) {
-      fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        
+        // Update map
+        map.setView([lat, lng], 15);
+        marker.setLatLng([lat, lng]);
+        
+        // Update hidden fields
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+        
+        // Reverse geocode to get address
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
           .then(response => response.json())
           .then(data => {
-              document.getElementById('location').value = data.display_name || `${lat}, ${lng}`;
-          })
-          .catch(() => {
-              document.getElementById('location').value = `${lat}, ${lng}`;
+            document.getElementById('location').value = data.display_name;
           });
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
   }
 
-  // Map click event
+  // Handle map clicks
   map.on('click', function(e) {
-      setMarker(e.latlng.lat, e.latlng.lng);
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    
+    marker.setLatLng([lat, lng]);
+    document.getElementById('latitude').value = lat;
+    document.getElementById('longitude').value = lng;
+    
+    // Reverse geocode
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('location').value = data.display_name;
+      });
   });
-
-  // Get user's current location
-  function getLocation() {
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-              let lat = position.coords.latitude;
-              let lng = position.coords.longitude;
-              map.setView([lat, lng], 16);
-              setMarker(lat, lng);
-          }, function(error) {
-              alert('Unable to retrieve location. Please allow location access.');
-          });
-      } else {
-          alert('Geolocation is not supported by this browser.');
-      }
-  }
 </script>
+
 {% endblock %}

@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,17 +9,21 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <!-- Header --> 
+    <!-- Header -->
     <header class="header">
-      <div class="logo-img"> 
-        <img src="{% static 'EkThaal.svg' %}" alt="EkThal Logo">
-        <a href="/contact" class="login-btn">Get in Touch</a>
+          <div class="logo-container">
+            <div class="logo_img"><img src="{% static 'Finnnal_logo.svg' %}" alt="Ek Thaal Logo" class="logo-img"></div>
         </div>
-        <!-- <a href="{% if user.is_authenticated %}/logout/{% else %}/login/{% endif %}" class="login-btn">{% if user.is_authenticated %}Logout{% else %}Login{% endif %}</a> -->
+        <a href="/contact" class="login-btn">Get in Touch</a>
     </header>
     <!-- Main Content -->
-    <main class="main-content">
-        <h1 class="heading">POST. SHARE. CARE.</h1>
+    <main class="main-content" style="margin-top: 1rem;">
+        <h1 class="heading drop-animate" id="drop-heading">
+          <span class="drop-word" id="drop-post">POST.</span> 
+          <span class="drop-word" id="drop-share">SHARE.</span> 
+          <span class="drop-word" id="drop-care">CARE.</span>
+        </h1>
+
         <p class="subheading">CONNECTING SURPLUS MEALS TO EMPTY PLATES ACROSS NEPAL.</p>
 
         <div class="wave-buttons">
@@ -54,7 +59,7 @@
     </svg>
   </div>
 </section>
-<!-- Place this after your About Us section -->
+
 <footer class="ekthaal-minimal-footer">
   <div class="footer-content">
     <div class="footer-left">
@@ -91,5 +96,30 @@
     Made with <span style="color:#fb923c;">❤️</span> at DAV Codefest 2025 by Team badUSB
   </div>
 </footer>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const words = [
+      document.getElementById('drop-post'),
+      document.getElementById('drop-share'),
+      document.getElementById('drop-care')
+    ];
+    words.forEach(word => {
+      word.style.opacity = 0;
+      word.style.transform = 'translateY(-60px)';
+      word.style.display = 'inline-block';
+      word.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s';
+    });
+    function dropWord(i) {
+      if (i >= words.length) return;
+      setTimeout(() => {
+        words[i].style.opacity = 1;
+        words[i].style.transform = 'translateY(0)';
+        dropWord(i + 1);
+      }, 350);
+    }
+    dropWord(0);
+  });
+</script>
+
 </body>
 </html>

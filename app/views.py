@@ -15,9 +15,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail
 from django.conf import settings
 import math
-from .whatsapp import whatsapp
+from .email_notifications import email_notifier
 
-# Create your views here.
+
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     """
@@ -172,22 +172,11 @@ def food_listing_form(request):
             longitude=longitude,
         )
         
-        # Send WhatsApp notification to admin
+        # Send email notification to admin
         try:
-            whatsapp.notify_admin_new_listing(listing)
+            email_notifier.send_admin_new_listing_notification(listing)
         except Exception as e:
-            print(f"WhatsApp notification failed: {e}")
-            # Fallback to email if WhatsApp fails
-            try:
-                send_mail(
-                    subject='New Food Listing Pending Approval',
-                    message=f'A new food listing has been submitted by {profile.user.username}.\n\nTitle: {title}\nLocation: {location}\nQuantity: {quantity} kg\nDescription: {description}\nReview: http://127.0.0.1:8000/dashboard/approve-listing/{listing.id}/',
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[a[1] for a in settings.ADMINS],
-                    fail_silently=True,
-                )
-            except Exception:
-                pass
+            print(f"Email notification failed: {e}")
         return redirect('thank_you')
     # Prefill form fields
     return render(request, 'food_listing_form.html', {'profile': profile})
@@ -281,11 +270,11 @@ def claim_listing(request, listing_id):
     
     claimed_listing = ClaimedListing.objects.create(food_listing=food_listing, organization=profile)
     
-    # Send WhatsApp notification to donor
+    # Send email notification to donor
     try:
-        whatsapp.notify_claim_made(claimed_listing)
+        email_notifier.send_claim_notification_to_donor(claimed_listing)
     except Exception as e:
-        print(f"WhatsApp claim notification failed: {e}")
+        print(f"Email claim notification failed: {e}")
     
     return redirect('receiver_dashboard')
 
@@ -352,20 +341,26 @@ def dashboard_approve_listing(request, listing_id):
             listing.status = 'approved'
             listing.save()
             
-            # Send WhatsApp notifications
+            # Send email notifications
             try:
-                # Notify donor that their listing was approved
-                whatsapp.notify_donor_listing_approved(listing)
+                # Notify donor about approval
+                email_notifier.send_donor_listing_approved_notification(listing)
                 
                 # Notify all receivers about new available food
-                receivers_notified = whatsapp.notify_receivers_new_listing(listing)
+                receivers_notified = email_notifier.send_receivers_new_listing_notification(listing)
                 print(f"Notified {receivers_notified} receivers about new listing")
             except Exception as e:
-                print(f"WhatsApp notifications failed: {e}")
+                print(f"Email notifications failed: {e}")
                 
         elif action == 'reject':
             listing.status = 'rejected'
             listing.save()
+            
+            # Send rejection notification to donor
+            try:
+                email_notifier.send_donor_listing_rejected_notification(listing)
+            except Exception as e:
+                print(f"Email rejection notification failed: {e}")
         return redirect('dashboard_pending_listings')
     return render(request, 'dashboard_approve_listing.html', {'listing': listing})
 

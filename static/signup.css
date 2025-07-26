@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 body {
-    margin: 0;
-    font-family: 'Montserrat', Arial, sans-serif;
-    background: #fff;
-  }
+  margin: 0;
+  font-family: 'Poppins', Arial, sans-serif;
+  background: #fff;
+}
   
   .signup-container {
     min-height: 100vh;

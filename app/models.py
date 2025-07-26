@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,7 +11,6 @@ class Profile(models.Model):
     phone_number_2 = models.CharField(max_length=20, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    # Add more fields as needed
 
     def __str__(self):
         return self.user.username
@@ -33,8 +32,6 @@ class FoodListing(models.Model):
     prepared_by = models.CharField(max_length=50, blank=True, help_text='Required')
     special_instructions = models.TextField(blank=True, help_text='Optional')
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')], default='pending')
-    # Removed: allergens, best_before, servings
-    # Add more fields as needed
 
     def __str__(self):
         return self.title

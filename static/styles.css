@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Moonshine:wght@400;500;600;700&display=swap');
 
 /* Root variables */
 :root {
@@ -12,7 +14,7 @@
 /* Base Styles */
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   background: var(--background);
   color: var(--text);
   min-height: 100vh;
@@ -21,33 +23,20 @@ body {
   overflow-x: hidden;
   padding: 0;
 }
-/* .logo-img {
-  display: flex;
-  align-items: center;  
-  gap: 10px;            
-  height: auto;         
-} */
-.logo-img {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Logo on left, button on right */
+.logo {
+  color:white;
 }
-
-.login-btn {
-  background: #fb923c;
-  color: #fff;
-  padding: 1rem 2rem;
-  font-size: 0.95rem;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
 /* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 0.25rem 1.5rem 0 1.5rem; /* further reduced top padding */
+  background-color: rgba(254, 254, 254, 0.4); /* semi-transparent light gray */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  position: relative;
+  z-index: 10;
 }
 @media (min-width: 768px) {
   .header {
@@ -55,7 +44,29 @@ body {
     padding-right: 4rem;
   }
 }
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 200px;
+  height: 200px;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+}
+.logo-img {
+  width: 200px;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-25px);
+}
 
+.logo_img {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
 .logo-en {
   font-size: 0.75rem;
   color: #fb923c;
@@ -68,6 +79,27 @@ body {
   font-weight: bold;
   color: #dc2626;
   line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .logo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+}
+.drop-animate {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+.drop-word {
+  margin: 0 0.2em;
+  opacity: 0;
+  transform: translateY(-60px);
+  display: inline-block;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s;
 }
 
 /* Navigation Bar */
@@ -86,12 +118,18 @@ body {
   font-size: 1.4rem;
   letter-spacing: 1px;
 }
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .navbar nav a {
   color: #fff;
   text-decoration: none;
-  margin-left: 1.5rem;
   font-weight: 500;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 .navbar nav a:hover {
   color: var(--primary);
@@ -101,11 +139,12 @@ body {
 .logout-link {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: rgba(255, 255, 255, 0.1);
-  padding: 8px 12px;
-  border-radius: 20px;
+  padding: 6px 10px;
+  border-radius: 16px;
   transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
 .logout-link:hover {
@@ -129,7 +168,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 2rem;
+  margin-top: 1rem;
   position: relative;
   z-index: 10;
   margin-bottom: 2rem; /* Add space before wave */
@@ -137,6 +176,7 @@ body {
 
 /* Headings */
 .heading {
+  font-family: 'Moonshine', Arial, sans-serif;
   font-size: 2rem;
   font-weight: bold;
   color: #166534;
@@ -145,7 +185,7 @@ body {
 }
 @media (min-width: 768px) {
   .heading {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
   }
 }
 
@@ -164,8 +204,7 @@ body {
 
 /* Buttons */
 /* Base button styles */
-/* Primary button (for Claim This Listing) */
-/* Primary button (for Claim This Listing) */
+/* Primary button */
 .btn-primary {
   padding: 10px 18px;
   font-size: 16px;
@@ -218,14 +257,13 @@ body {
 }
 
 /* Specific Buttons */
-/* .login-btn {
-  position: relative;
-  right: 0%;
+.login-btn {
   background: #fb923c;
   color: #fff;
   padding: 1rem 2rem;
   font-size: 0.95rem;
-} */
+  transform: translateY(-30px);
+}
 .login-btn:hover {
   background: #fdba74;
 }
@@ -234,6 +272,7 @@ body {
   background: #ec4899;
   color: #fff;
   padding: 0.75rem 2rem;
+  font-size: 1.2rem;
 }
 .donate-btn:hover {
   background: #db2777;
@@ -243,6 +282,7 @@ body {
   background: #fb923c;
   color: #fff;
   padding: 0.75rem 2rem;
+  font-size: 1.2rem;
 }
 .claim-btn:hover {
   background: #fdba74;
@@ -275,6 +315,7 @@ body {
   width: 100%;
   margin-top: 0; /* Remove negative margin */
   z-index: 0;
+  transform: translateY(-190px);
 }
 .wave-svg {
   transform: translateY(0); /* Remove the upward transform */
@@ -367,12 +408,25 @@ footer {
 /* Mobile responsiveness */
 @media (max-width: 600px) {
   .navbar {
-    flex-direction: column;
+    flex-direction: row;
     height: auto;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
+    flex-wrap: wrap;
   }
   .navbar nav {
-    margin-top: 0.5rem;
+    margin-top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .navbar nav a {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .logout-link {
+    padding: 6px 10px;
+    font-size: 0.85rem;
   }
   main {
     margin: 1rem 0 0 0;
@@ -389,7 +443,7 @@ footer {
   gap: 2.5rem;
   width: 100%;
   max-width: 1200px;
-  margin: 2.5rem auto 0 auto;
+  margin: 1rem 1rem 1rem auto;
   padding: 0 2.5rem 0 3.5rem; /* More left padding for text, less right */
   background: none;
   border-radius: 0;
@@ -417,6 +471,7 @@ footer {
 }
 
 .ekthaal-heading-en {
+  font-family: 'Moonshine', Arial, sans-serif;
   font-size: 2.1rem;
   font-weight: 700;
   color: #fb923c;
@@ -497,7 +552,7 @@ footer {
   margin-top: 2.5rem;
   width: 100%;
   box-shadow: 0 0 8px 0 rgba(56,142,60,0.04);
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
 }
 
 .ekthaal-minimal-footer .footer-content {
@@ -877,7 +932,7 @@ input[type="checkbox"]:checked::before {
 
 .inline-checkbox input[type="checkbox"] {
   margin: 0;
-  transform: translateY(2px); /* Small adjustment to align with text */
+  transform: translateY(2px);
 }
 .inline-checkbox input[type="checkbox"] {
   position: relative;
@@ -913,4 +968,129 @@ input[type="checkbox"]:checked::before {
   font-size: 1em;
 }
 
+/* Receiver Dashboard Multi-column Layout */
+.listings {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 4rem !important;
+  margin-top: 2rem !important;
+  width: 100% !important;
+}
 
+/* Receiver Dashboard specific listing card styles */
+.listings .listing-card {
+  background: #fff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 12px rgba(67, 146, 73, 0.1) !important;
+  padding: 1.5rem !important;
+  border: 1px solid #e8f5e9 !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  flex: unset !important;
+}
+
+.listings .listing-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 25px rgba(67, 146, 73, 0.15) !important;
+}
+
+.listings .listing-card h3 {
+  color: #439249 !important;
+  margin-bottom: 1rem !important;
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+}
+
+.listings .listing-card p {
+  margin-bottom: 0.8rem !important;
+  color: #555 !important;
+  line-height: 1.5 !important;
+}
+
+.listings .listing-card strong {
+  color: #333 !important;
+  font-weight: 600 !important;
+}
+
+.listings .listing-card .listing-img {
+  width: 100% !important;
+  height: 180px !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 18px;
+  border: 2px dashed #dee2e6;
+  grid-column: 1 / -1;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #adb5bd;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.empty-state p {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.empty-state a {
+  color: #439249;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.empty-state a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design for receiver dashboard */
+@media (max-width: 768px) {
+  .listings {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    margin-top: 1rem !important;
+  }
+  
+  .listings .listing-card {
+    padding: 1rem !important;
+  }
+  
+  .listings .listing-card h3 {
+    font-size: 1.1rem !important;
+  }
+  
+  .empty-state {
+    padding: 2rem 1rem !important;
+  }
+  
+  .empty-state i {
+    font-size: 2.5rem !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .listings {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
+  }
+}

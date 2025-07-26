@@ -12,7 +12,6 @@
     <p><strong>Receiver:</strong> {{ receiver.user.username }} ({{ receiver.phone_number_1 }})</p>
     <p><strong>Location:</strong> {{ listing.location }}</p>
     <p><strong>Quantity:</strong> {{ listing.quantity }} kg</p>
-    <p><strong>Type:</strong> {{ listing.type_of_food }}</p>
   </div>
   {% if not already_rated %}
     <form method="post" class="rating-form">

@@ -1,98 +1,263 @@
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f0f4f1;
-    margin: 0;
-    padding: 0;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Override base styles for registration pages */
+.auth-page {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container.auth-page {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.form-box {
+  width: 100%;
+}
+
+.form-box h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.form-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #333;
+  font-size: 0.95em;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/* Direct label styling for forms without form-group wrapper */
+.form-box form label {
+  color: #333;
+  font-size: 0.95em;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group textarea,
+.form-group select,
+.form-box form input[type="text"],
+.form-box form input[type="email"],
+.form-box form input[type="password"],
+.form-box form input[type="tel"],
+.form-box form textarea,
+.form-box form select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.form-box form input[type="text"]:focus,
+.form-box form input[type="email"]:focus,
+.form-box form input[type="password"]:focus,
+.form-box form input[type="tel"]:focus,
+.form-box form textarea:focus,
+.form-box form select:focus {
+  outline: none;
+  border-color: #439249;
+  box-shadow: 0 0 0 3px rgba(67, 146, 73, 0.1);
+}
+
+.form-group input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.checkbox-group label {
+  margin-bottom: 0;
+  font-size: 0.9em;
+}
+
+/* Radio button styling */
+.form-box form input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+/* Role selection styling */
+.form-box form label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Style radio button labels differently - using a more compatible approach */
+.form-box form input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+/* Make radio button labels inline */
+.form-box form label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Special styling for role section */
+.form-box form label[for="role"] {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.btn {
+  background-color: #439249;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #367a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 146, 73, 0.3);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Location button styling */
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Form spacing improvements */
+.form-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-box form br {
+  display: none;
+}
+
+/* Map container styling */
+#map {
+  height: 300px;
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid #e1e5e9;
+  margin-top: 10px;
+}
+
+/* Error and success message styling */
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.alert-danger {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container.auth-page {
+    padding: 20px;
+    margin: 10px;
   }
   
-  
-  .logo {
+  .form-box h2 {
     font-size: 1.5em;
-    font-weight: bold;
-    color: #439249;
   }
   
-  .nav-links a {
-    margin-left: 1em;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-  }
-  
-  .nav-links a.cta {
-    background-color: #439249;
-    color: white;
-    padding: 0.4em 1em;
-    border-radius: 5px;
-    font-weight: bold;
-  }
-  
-  main {
-    max-width: 500px;
-    margin: 2em auto;
-    background: #fff;
-    padding: 2em;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 1.5em;
-    color: #333;
-  }
-  
-  form label {
-    display: block;
-    margin-bottom: 1em;
-    color: #333;
-    font-size: 0.95em;
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 0.75em;
-    margin-top: 0.3em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  .btn {
+    padding: 12px 20px;
     font-size: 1em;
   }
-  
-  input[type="checkbox"] {
-    margin-right: 0.5em;
+}
+
+/* Phone number fields styling */
+.phone-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+@media (max-width: 480px) {
+  .phone-fields {
+    grid-template-columns: 1fr;
   }
+}
   
-  button[type="submit"] {
-    background-color: #439249;
-    color: white;
-    padding: 0.75em;
-    border: none;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 1em;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #367a3a;
-  }
-  
-  div[style*="background: #f8d7da"] {
-    background: #f8d7da;
-    color: #721c24;
-    padding: 1em;
-    border-radius: 5px;
-    margin-bottom: 1em;
-  }
-  
-  div[style*="background: #d4edda"] {
-    background: #d4edda;
-    color: #155724;
-    padding: 1em;
-    border-radius: 5px;
-    margin-bottom: 1em;
-  }

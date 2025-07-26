@@ -5,7 +5,6 @@ from .models import Profile
 
 class WhatsAppNotifier:
     def __init__(self):
-        # You'll need to get these from your WhatsApp API provider
         self.api_url = getattr(settings, 'WHATSAPP_API_URL', None)
         self.api_key = getattr(settings, 'WHATSAPP_API_KEY', None)
         self.phone_number_id = getattr(settings, 'WHATSAPP_PHONE_NUMBER_ID', None)

@@ -4,6 +4,9 @@
 <head>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="{% static 'plate.png' %}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Moonshine:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}EkThal - Food Donation Platform{% endblock %}</title>
@@ -12,7 +15,7 @@
 </head>
 <body>
     <header class="navbar">
-        <div class="logo"><img src="{% static 'Ek-thal-navigation-logo.svg' %}" alt="EkThal Logo class = "logo-img"></div>
+        <div class="logo" style="color:white;">EkThal</div>
         <nav>
             <a href="/">Home</a>
             <a href="/about/">About</a>
@@ -26,9 +29,8 @@
                         <a href="/listings/">Claim</a>
                     {% endif %}
                 {% endwith %}
-                <a href="/logout/" class="logout-link">
+                <a href="/logout/" class="logout-link" title="{{ user.username }}">
                     <i class="fas fa-user-circle"></i>
-                    {{ user.username|slice:":3"|upper }}
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
             {% else %}

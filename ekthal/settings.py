@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 
@@ -22,13 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-$+25wb&&5p$pw2rz7ufyk-ol!#8ewyuy9m9-&h-86y7)p75c&8"
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-$+25wb&&5p$pw2rz7ufyk-ol!#8ewyuy9m9-&h-86y7)p75c&8")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='https://127.0.0.1,https://localhost').split(',')
 
 # Application definition
 
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -85,6 +88,11 @@ DATABASES = {
     }
 }
 
+# Use PostgreSQL in production (Render)
+if config('DATABASE_URL', default=None):
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -121,6 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
@@ -131,15 +141,22 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# WhatsApp API Configuration
-# Get these from your WhatsApp Business API provider (e.g., 360dialog, Twilio, etc.)
-WHATSAPP_API_URL = "https://graph.facebook.com/v18.0"  # Example for Meta WhatsApp Business API
-WHATSAPP_API_KEY = ""  # Your API key/token
-WHATSAPP_PHONE_NUMBER_ID = ""  # Your WhatsApp phone number ID
-ADMIN_WHATSAPP_NUMBER = ""  # Admin's WhatsApp number (with country code, e.g., "9771234567890")
+#
 
-# Email Configuration (fallback)
-DEFAULT_FROM_EMAIL = "noreply@ekthal.com"
+# Email Configuration
+DEFAULT_FROM_EMAIL = "aarohan567@gmail.com"
 ADMINS = [
-    ("Admin", "admin@ekthal.com"),
+    ("Admin", "aarohan.niraula@westcliff.edu"),
+    ("Admin", "krish.naharki@westcliff.edu"),
+    ("Admin", "diwa.shrestha@westcliff.edu"),
+    ("Admin", "aadarsh.karn@westcliff.edu"),
 ]
+
+# Email Backend Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # For Gmail
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'aarohan567@gmail.com'
+EMAIL_HOST_PASSWORD = 'aziu ouyg oocu vnvm'
