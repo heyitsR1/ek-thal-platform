@@ -14,16 +14,18 @@
             <div class="logo-en">EK THAAL</div>
             <div class="logo-nep">एक थाल</div>
         </div>
-        <a href="{% if user.is_authenticated %}/logout/{% else %}/login/{% endif %}" class="login-btn">{% if user.is_authenticated %}Logout{% else %}Login/ SignUp{% endif %}</a>
+        <!-- <a href="{% if user.is_authenticated %}/logout/{% else %}/login/{% endif %}" class="login-btn">{% if user.is_authenticated %}Logout{% else %}Login{% endif %}</a> -->
+        <a href="/contact" class="login-btn">Get in Touch</a>
     </header>
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="heading">POST. SHARE. CARE.</h1>
         <p class="subheading">CONNECTING SURPLUS MEALS TO EMPTY PLATES ACROSS NEPAL.</p>
-                <div class="wave-buttons">
-            <a href="{% if user.is_authenticated and profile and not profile.is_receiver %}/food_listing_form/{% else %}/login?next=/food_listing_form/{% endif %}" class="donate-btn">Donate Food</a>
-            <a href="{% if user.is_authenticated and profile and profile.is_receiver %}/listings/{% else %}/login?next=/listings/{% endif %}" class="claim-btn">Claim Food</a>
-        </div>
+
+        <div class="wave-buttons">
+          <a href="{% if user.is_authenticated and profile and not profile.is_receiver %}/food_listing_form/{% else %}/login?next=/food_listing_form/{% endif %}" class="donate-btn">Donate Food</a>
+          <a href="/listings/" class="claim-btn">Claim Food</a>
+      </div>
     </main>
     <div class="wave-container">
         <svg viewBox="0 0 1439 712" fill="none" xmlns="http://www.w3.org/2000/svg" class="wave-svg">
@@ -34,7 +36,7 @@
         </div>
         <!-- Buttons on the wave -->
     </div>
-    
+  
     <!-- SVG Wave -->
 
     <!-- Ek Thaal Intro Section -->
@@ -45,7 +47,7 @@
     <p class="ekthaal-desc">
       Ek Thal is a community driven food sharing platform that connects those with surplus food to those who need it. Our mission is simple, reduce food waste and spread kindness, one plate at a time. What’s extra for you could mean a full meal for someone else.
     </p>
-    <a href="#about" class="readmore-btn">Read More</a>
+    <a href="/about" class="readmore-btn">Read More</a>
   </div>
   <div class="ekthaal-illustration">
     <!-- Simple SVG illustration of hands sharing a plate -->
@@ -62,8 +64,8 @@
     </div>
     <nav class="footer-nav">
       <a href="/">Home</a>
-      <a href="/post">Post Food</a>
-      <a href="/claim">Claim Food</a>
+      <a href="{% if user.is_authenticated and profile and not profile.is_receiver %}/food_listing_form/{% else %}/login?next=/food_listing_form/{% endif %}">Post Food</a>
+      <a href="/listings">Claim Food</a>
       <a href="/about">About Us</a>
     </nav>
     <div class="footer-social">

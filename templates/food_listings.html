@@ -1,31 +1,84 @@
 {% extends "base.html" %}
 {% load static %}
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'styles.css' %}">
+<link rel="stylesheet" href="{% static 'listings.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 {% endblock %}
+
 {% block content %}
+{% if not user.is_authenticated %}
+<div class="login-notice">
+  <p>You must be Logged In to continue this operation</p>
+</div>
+{% elif user.is_authenticated and profile and not profile.is_receiver %}
+<div class="login-notice">
+  <p>You are logged in as a donor. Please signup as a receiver to claim listings.</p>
+</div>
+{% endif %}
+
+<h2 class="title">Available Food Listings</h2>
+
 <div class="listings-container">
-  <h2>Available Food Listings</h2>
   <form method="get" class="filter-form">
-    <input type="text" name="type_of_food" placeholder="Type of Food" value="{{ food_type }}">
-    <input type="text" name="location" placeholder="Location" value="{{ location }}">
+    <label for="radius">Show listings within:</label>
+    <select name="radius" id="radius">
+      <option value="">All distances</option>
+      <option value="1" {% if radius == "1" %}selected{% endif %}>1 km</option>
+      <option value="3" {% if radius == "3" %}selected{% endif %}>3 km</option>
+      <option value="5" {% if radius == "5" %}selected{% endif %}>5 km</option>
+      <option value="10" {% if radius == "10" %}selected{% endif %}>10 km</option>
+      <option value="15" {% if radius == "15" %}selected{% endif %}>15 km</option>
+      <option value="20" {% if radius == "20" %}selected{% endif %}>20 km</option>
+    </select>
     <button type="submit">Filter</button>
   </form>
-  <div class="listings-list">
+  
+  <div class="listings-grid">
     {% for listing in listings %}
-      <div class="listing-card">
-        <h3>{{ listing.title }}</h3>
-        <p><strong>Location:</strong> {{ listing.location }}</p>
-        <p><strong>Quantity:</strong> {{ listing.quantity }} kg</p>
-        <p><strong>Type:</strong> {{ listing.type_of_food }}</p>
-        <a href="{% url 'listing_detail' listing.id %}" class="readmore-btn">View Details</a>
-        {% if is_org and listing.id not in claimed_ids %}
-          <a href="{% url 'claim_listing' listing.id %}" class="claim-btn">Claim</a>
+      <div class="food-card {% if listing.id in claimed_ids %}claimed{% endif %}">
+        {% if listing.id in claimed_ids %}
+          <div class="claimed-badge">
+            <i class="fas fa-check-circle"></i> Claimed
+          </div>
         {% endif %}
+        
+        {% if listing.image %}
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" class="food-img">
+        {% else %}
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=100&q=80" alt="{{ listing.title }}" class="food-img">
+        {% endif %}
+        
+        <div class="food-info">
+          <div class="food-title">{{ listing.title }}</div>
+          <div class="food-qty">Quantity: {{ listing.quantity }} kg</div>
+          <div class="food-location" title="{{ listing.location }}">Location: {{ listing.location|truncatechars:40 }}</div>
+          <div class="food-type">Type: {{ listing.type_of_food|default:"Not specified" }}</div>
+          
+          {% if listing.best_before %}
+          <div class="food-best-before">Best Before: {{ listing.best_before|date:"Y-m-d H:i" }}</div>
+          {% endif %}
+          
+          <div class="food-status-bar">
+            <span class="status-dot fresh"></span>
+            <span class="status-text">Fresh</span>
+          </div>
+          
+          <div class="card-actions">
+            <a href="{% url 'listing_detail' listing.id %}" class="details-btn">View Details</a>
+            {% if user.is_authenticated and is_org and listing.id not in claimed_ids %}
+              <a href="{% url 'claim_listing' listing.id %}" class="claim-btn">Claim Food</a>
+            {% elif not user.is_authenticated %}
+              <a href="{% url 'login' %}" class="claim-btn">Login to Claim</a>
+            {% endif %}
+          </div>
+        </div>
       </div>
     {% empty %}
-      <p>No listings found.</p>
+      <div class="no-listings">
+        <p>No listings found.</p>
+      </div>
     {% endfor %}
   </div>
 </div>
-{% endblock %} 
+{% endblock %}

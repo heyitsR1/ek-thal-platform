@@ -122,7 +122,24 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# Media files (Uploaded files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# WhatsApp API Configuration
+# Get these from your WhatsApp Business API provider (e.g., 360dialog, Twilio, etc.)
+WHATSAPP_API_URL = "https://graph.facebook.com/v18.0"  # Example for Meta WhatsApp Business API
+WHATSAPP_API_KEY = ""  # Your API key/token
+WHATSAPP_PHONE_NUMBER_ID = ""  # Your WhatsApp phone number ID
+ADMIN_WHATSAPP_NUMBER = ""  # Admin's WhatsApp number (with country code, e.g., "9771234567890")
+
+# Email Configuration (fallback)
+DEFAULT_FROM_EMAIL = "noreply@ekthal.com"
+ADMINS = [
+    ("Admin", "admin@ekthal.com"),
+]

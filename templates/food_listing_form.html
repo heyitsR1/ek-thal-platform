@@ -2,29 +2,117 @@
 {% load static %}
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'styles.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 {% endblock %}
 {% block content %}
+{% if user.is_authenticated and profile and profile.is_receiver %}
+<div class="login-notice">
+  <p>You are logged in as a receiver. Please signup as a donor to post listings.</p>
+</div>
+{% endif %}
 <div class="form-container">
   <h2>Donate Surplus Food</h2>
   <form method="post" enctype="multipart/form-data" class="donation-form">
     {% csrf_token %}
     {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
     <label>Title*<input type="text" name="title" required></label>
-    <label>Location*<input type="text" name="location" required></label>
+
+    <!-- Location field (auto-filled) -->
+    <label>Location*<input type="text" name="location" id="location" readonly required></label>
+
+    <!-- Leaflet map -->
+    <div id="map" style="height: 300px; margin-bottom: 10px;"></div>
+    <button type="button" onclick="getLocation()">Choose My Current Location</button>
+    <br><br>
+
     <label>Quantity (kg)*<input type="number" step="0.1" name="quantity" required></label>
-    <label>Type of Food*<input type="text" name="type_of_food" required></label>
     <label>Description*<textarea name="description" required></textarea></label>
     <label>Prepared At*<input type="datetime-local" name="prepared_at" required></label>
-    <label>Image<input type="file" name="image"></label>
+    <label>Image<input type="file" name="image" required></label>
     <label>Phone Number 1*<input type="text" name="phone_number_1" value="{{ profile.phone_number_1 }}" required></label>
-    <label>Phone Number 2*<input type="text" name="phone_number_2" value="{{ profile.phone_number_2 }}" required></label>
-    <label><input type="checkbox" name="recurring"> Recurring Donation</label>
-    <label>Storage Instructions<input type="text" name="storage"></label>
-    <label>Prepared By<input type="text" name="prepared_by"></label>
-    <label>Special Instructions<textarea name="special_instructions"></textarea></label>
-    <label>Latitude<input type="text" name="latitude"></label>
-    <label>Longitude<input type="text" name="longitude"></label>
+    <label>Phone Number 2<input type="text" name="phone_number_2" value="{{ profile.phone_number_2 }}"></label>
+    <label class="inline-checkbox">
+      Recurring Donation: <input type="checkbox" name="recurring"> 
+    </label>    
+    <br>
+    <label>How was the food stored?*
+      <select name="storage" required>
+          <option value="">Select...</option>
+          <option value="refrigerated">Refrigerated</option>
+          <option value="room_temp">Room Temperature</option>
+          <option value="hot_held">Hot Held</option>
+      </select>
+  </label><br>
+  <label>Who prepared the food?*
+    <select name="prepared_by" required>
+        <option value="">Select...</option>
+        <option value="home">Home</option>
+        <option value="caterer">Caterer</option>
+        <option value="restaurant">Restaurant</option>
+    </select>
+</label><br>
+    <!-- <label>Storage Instructions<input type="text" name="storage"></label>
+    <label>Prepared By<input type="text" name="prepared_by"></label> -->
+    <label>Special Instructions: <textarea name="special_instructions"></textarea></label>
+
+    <!-- Hidden Latitude & Longitude -->
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
+
     <button type="submit">Submit Donation</button>
   </form>
 </div>
-{% endblock %} 
+
+<script>
+  // Initialize map
+  let map = L.map('map').setView([27.7103, 85.3222], 12); // Default: Kathmandu
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  let marker;
+
+  function setMarker(lat, lng) {
+      if (marker) map.removeLayer(marker);
+      marker = L.marker([lat, lng]).addTo(map);
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+      reverseGeocode(lat, lng);
+  }
+
+  // Reverse Geocoding
+  function reverseGeocode(lat, lng) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+          .then(response => response.json())
+          .then(data => {
+              document.getElementById('location').value = data.display_name || `${lat}, ${lng}`;
+          })
+          .catch(() => {
+              document.getElementById('location').value = `${lat}, ${lng}`;
+          });
+  }
+
+  // Map click event
+  map.on('click', function(e) {
+      setMarker(e.latlng.lat, e.latlng.lng);
+  });
+
+  // Get user's current location
+  function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+              let lat = position.coords.latitude;
+              let lng = position.coords.longitude;
+              map.setView([lat, lng], 16);
+              setMarker(lat, lng);
+          }, function(error) {
+              alert('Unable to retrieve location. Please allow location access.');
+          });
+      } else {
+          alert('Geolocation is not supported by this browser.');
+      }
+  }
+</script>
+{% endblock %}

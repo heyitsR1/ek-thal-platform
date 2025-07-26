@@ -14,8 +14,32 @@ import datetime
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail
 from django.conf import settings
+import math
+from .whatsapp import whatsapp
 
 # Create your views here.
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    """
+    Calculate the distance between two points using the Haversine formula.
+    Returns distance in kilometers.
+    """
+    if lat1 is None or lon1 is None or lat2 is None or lon2 is None:
+        return float('inf')
+    
+    # Convert decimal degrees to radians
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+    
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+    c = 2 * math.asin(math.sqrt(a))
+    
+    # Radius of earth in kilometers
+    r = 6371
+    
+    return c * r
 
 def home(request):
     return render(request, 'index.html')
@@ -105,7 +129,6 @@ def food_listing_form(request):
             quantity = float(request.POST.get('quantity'))
         except (TypeError, ValueError):
             quantity = None
-        type_of_food = request.POST.get('type_of_food')
         description = request.POST.get('description')
         prepared_at = request.POST.get('prepared_at')
         image = request.FILES.get('image')
@@ -137,7 +160,6 @@ def food_listing_form(request):
             title=title,
             location=location,
             quantity=quantity,
-            type_of_food=type_of_food,
             description=description,
             prepared_at=prepared_at_dt,
             image=image,
@@ -149,17 +171,23 @@ def food_listing_form(request):
             latitude=latitude,
             longitude=longitude,
         )
-        # Send email to admin
+        
+        # Send WhatsApp notification to admin
         try:
-            send_mail(
-                subject='New Food Listing Pending Approval',
-                message=f'A new food listing has been submitted by {profile.user.username}.\n\nTitle: {title}\nLocation: {location}\nQuantity: {quantity} kg\nType: {type_of_food}\nDescription: {description}\nReview: http://127.0.0.1:8000/admin/approve-listing/{listing.id}/',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[a[1] for a in settings.ADMINS],
-                fail_silently=True,
-            )
-        except Exception:
-            pass
+            whatsapp.notify_admin_new_listing(listing)
+        except Exception as e:
+            print(f"WhatsApp notification failed: {e}")
+            # Fallback to email if WhatsApp fails
+            try:
+                send_mail(
+                    subject='New Food Listing Pending Approval',
+                    message=f'A new food listing has been submitted by {profile.user.username}.\n\nTitle: {title}\nLocation: {location}\nQuantity: {quantity} kg\nDescription: {description}\nReview: http://127.0.0.1:8000/dashboard/approve-listing/{listing.id}/',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[a[1] for a in settings.ADMINS],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
         return redirect('thank_you')
     # Prefill form fields
     return render(request, 'food_listing_form.html', {'profile': profile})
@@ -199,28 +227,50 @@ def listing_detail(request, listing_id):
     })
 
 def listings(request):
-    food_type = request.GET.get('type_of_food', '')
-    location = request.GET.get('location', '')
+    radius = request.GET.get('radius', '')
     listings = FoodListing.objects.filter(status='approved')
-    if food_type:
-        listings = listings.filter(type_of_food__icontains=food_type)
-    if location:
-        listings = listings.filter(location__icontains=location)
-    listings = listings.order_by('-created_at')
+    
+    # Filter by distance if radius is provided and user is authenticated
+    if radius and request.user.is_authenticated:
+        try:
+            radius_km = float(radius)
+            user_profile = Profile.objects.get(user=request.user)
+            
+            if user_profile.latitude and user_profile.longitude:
+                # Filter listings within the specified radius
+                nearby_listings = []
+                for listing in listings:
+                    if listing.latitude and listing.longitude:
+                        distance = calculate_distance(
+                            user_profile.latitude, user_profile.longitude,
+                            listing.latitude, listing.longitude
+                        )
+                        if distance <= radius_km:
+                            nearby_listings.append(listing)
+                listings = nearby_listings
+        except (ValueError, Profile.DoesNotExist):
+            pass
+    
+    listings = sorted(listings, key=lambda x: x.created_at, reverse=True)
+    
     user_profile = None
     is_org = False
     if request.user.is_authenticated:
-        user_profile = Profile.objects.get(user=request.user)
-        is_org = user_profile.is_organization
+        try:
+            user_profile = Profile.objects.get(user=request.user)
+            is_org = user_profile.is_organization
+        except Profile.DoesNotExist:
+            pass
+    
     return render(request, 'food_listings.html', {
         'listings': listings,
-        'food_type': food_type,
-        'location': location,
+        'radius': radius,
         'is_org': is_org,
     })
 
-@login_required
 def claim_listing(request, listing_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     profile = Profile.objects.get(user=request.user)
     if not profile.is_organization:
         return redirect('landing_page')
@@ -228,7 +278,15 @@ def claim_listing(request, listing_id):
     # Prevent double-claim
     if ClaimedListing.objects.filter(food_listing=food_listing).exists():
         return redirect('receiver_dashboard')
-    ClaimedListing.objects.create(food_listing=food_listing, organization=profile)
+    
+    claimed_listing = ClaimedListing.objects.create(food_listing=food_listing, organization=profile)
+    
+    # Send WhatsApp notification to donor
+    try:
+        whatsapp.notify_claim_made(claimed_listing)
+    except Exception as e:
+        print(f"WhatsApp claim notification failed: {e}")
+    
     return redirect('receiver_dashboard')
 
 @login_required
@@ -292,9 +350,22 @@ def dashboard_approve_listing(request, listing_id):
         action = request.POST.get('action')
         if action == 'approve':
             listing.status = 'approved'
+            listing.save()
+            
+            # Send WhatsApp notifications
+            try:
+                # Notify donor that their listing was approved
+                whatsapp.notify_donor_listing_approved(listing)
+                
+                # Notify all receivers about new available food
+                receivers_notified = whatsapp.notify_receivers_new_listing(listing)
+                print(f"Notified {receivers_notified} receivers about new listing")
+            except Exception as e:
+                print(f"WhatsApp notifications failed: {e}")
+                
         elif action == 'reject':
             listing.status = 'rejected'
-        listing.save()
+            listing.save()
         return redirect('dashboard_pending_listings')
     return render(request, 'dashboard_approve_listing.html', {'listing': listing})
 
@@ -306,6 +377,14 @@ def register_individual(request):
         email = request.POST.get('email')
         phone_number_1 = request.POST.get('phone_number_1')
         phone_number_2 = request.POST.get('phone_number_2')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        try:
+            latitude = float(latitude) if latitude else None
+            longitude = float(longitude) if longitude else None
+        except (TypeError, ValueError):
+            latitude = None
+            longitude = None
         role = request.POST.get('role')
         is_organization = False
         is_receiver = (role == 'receiver')
@@ -316,7 +395,7 @@ def register_individual(request):
         if User.objects.filter(username=username).exists():
             return render(request, 'register_individual.html', {'error': 'Username already exists.'})
         user = User.objects.create_user(username=username, password=password, email=email)
-        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization, is_receiver=is_receiver)
+        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization, is_receiver=is_receiver, latitude=latitude, longitude=longitude)
         return render(request, 'register_individual.html', {'success': True})
     return render(request, 'register_individual.html')
 
@@ -328,6 +407,14 @@ def register_organization(request):
         email = request.POST.get('email')
         phone_number_1 = request.POST.get('phone_number_1')
         phone_number_2 = request.POST.get('phone_number_2')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        try:
+            latitude = float(latitude) if latitude else None
+            longitude = float(longitude) if longitude else None
+        except (TypeError, ValueError):
+            latitude = None
+            longitude = None
         role = request.POST.get('role')
         is_organization = True
         is_receiver = (role == 'receiver')
@@ -338,7 +425,7 @@ def register_organization(request):
         if User.objects.filter(username=username).exists():
             return render(request, 'register_organization.html', {'error': 'Username already exists.'})
         user = User.objects.create_user(username=username, password=password, email=email)
-        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization, is_receiver=is_receiver)
+        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization, is_receiver=is_receiver, latitude=latitude, longitude=longitude)
         return render(request, 'register_organization.html', {'success': True})
     return render(request, 'register_organization.html')
 

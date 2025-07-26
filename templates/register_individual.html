@@ -3,6 +3,8 @@
 
 {% block extra_head %}
   <link rel="stylesheet" href="{% static 'register_organization.css' %}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -40,10 +42,22 @@
       <label>Phone Number 2:
         <input type="text" name="phone_number_2" required>
       </label>
+
+      <!-- Location field (auto-filled) -->
+      <label>Location*<input type="text" name="location" id="location" readonly required></label>
+
+      <!-- Leaflet map -->
+      <div id="map" style="height: 300px; margin-bottom: 10px;"></div>
+      <button type="button" onclick="getLocation()">Choose My Current Location</button>
+      <br><br>
+
       <label>Role:</label>
       <label><input type="radio" name="role" value="donor" required> Donor</label>
       <label><input type="radio" name="role" value="receiver" required> Receiver</label>
 
+      <!-- Hidden Latitude & Longitude -->
+      <input type="hidden" id="latitude" name="latitude">
+      <input type="hidden" id="longitude" name="longitude">
 
       <button type="submit" class="btn">Register</button>
     </form>
@@ -53,4 +67,56 @@
     </p>
   </div>
 </div>
+
+<script>
+  // Initialize map
+  let map = L.map('map').setView([27.7103, 85.3222], 12); // Default: Kathmandu
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  let marker;
+
+  function setMarker(lat, lng) {
+      if (marker) map.removeLayer(marker);
+      marker = L.marker([lat, lng]).addTo(map);
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+      reverseGeocode(lat, lng);
+  }
+
+  // Reverse Geocoding
+  function reverseGeocode(lat, lng) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+          .then(response => response.json())
+          .then(data => {
+              document.getElementById('location').value = data.display_name || `${lat}, ${lng}`;
+          })
+          .catch(() => {
+              document.getElementById('location').value = `${lat}, ${lng}`;
+          });
+  }
+
+  // Map click event
+  map.on('click', function(e) {
+      setMarker(e.latlng.lat, e.latlng.lng);
+  });
+
+  // Get user's current location
+  function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+              let lat = position.coords.latitude;
+              let lng = position.coords.longitude;
+              map.setView([lat, lng], 16);
+              setMarker(lat, lng);
+          }, function(error) {
+              alert('Unable to retrieve location. Please allow location access.');
+          });
+      } else {
+          alert('Geolocation is not supported by this browser.');
+      }
+  }
+</script>
 {% endblock %}

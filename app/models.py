@@ -9,6 +9,8 @@ class Profile(models.Model):
     is_receiver = models.BooleanField(default=False)
     phone_number_1 = models.CharField(max_length=20)
     phone_number_2 = models.CharField(max_length=20, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     # Add more fields as needed
 
     def __str__(self):
@@ -22,8 +24,6 @@ class FoodListing(models.Model):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     quantity = models.FloatField(help_text='Quantity in kg (Required)')
-    type_of_food = models.CharField(max_length=100, help_text='Required')
-    is_vegetarian = models.BooleanField(default=False)
     prepared_at = models.DateTimeField(null=True, blank=True, help_text='Date and hour food was prepared (Required)')
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='food_images/', blank=True, null=True)
