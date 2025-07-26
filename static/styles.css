@@ -21,6 +21,26 @@ body {
   overflow-x: hidden;
   padding: 0;
 }
+/* .logo-img {
+  display: flex;
+  align-items: center;  
+  gap: 10px;            
+  height: auto;         
+} */
+.logo-img {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Logo on left, button on right */
+}
+
+.login-btn {
+  background: #fb923c;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: 5px;
+}
 
 /* Header */
 .header {
@@ -198,12 +218,14 @@ body {
 }
 
 /* Specific Buttons */
-.login-btn {
+/* .login-btn {
+  position: relative;
+  right: 0%;
   background: #fb923c;
   color: #fff;
-  padding: 0.5rem 1.5rem;
+  padding: 1rem 2rem;
   font-size: 0.95rem;
-}
+} */
 .login-btn:hover {
   background: #fdba74;
 }

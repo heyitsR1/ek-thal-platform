@@ -8,14 +8,13 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header --> 
     <header class="header">
-        <div>
-            <div class="logo-en">EK THAAL</div>
-            <div class="logo-nep">एक थाल</div>
+      <div class="logo-img"> 
+        <img src="{% static 'EkThaal.svg' %}" alt="EkThal Logo">
+        <a href="/contact" class="login-btn">Get in Touch</a>
         </div>
         <!-- <a href="{% if user.is_authenticated %}/logout/{% else %}/login/{% endif %}" class="login-btn">{% if user.is_authenticated %}Logout{% else %}Login{% endif %}</a> -->
-        <a href="/contact" class="login-btn">Get in Touch</a>
     </header>
     <!-- Main Content -->
     <main class="main-content">
