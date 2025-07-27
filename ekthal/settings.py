@@ -142,14 +142,12 @@ STATICFILES_FINDERS = [
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = True
 
+# Site URL for email notifications
+SITE_URL = config('SITE_URL', default='https://ek-thal.onrender.com')
+
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-# Media files serving in production
-if not DEBUG:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
