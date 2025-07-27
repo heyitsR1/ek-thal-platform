@@ -20,8 +20,8 @@ python manage.py migrate contenttypes --noinput
 python manage.py migrate sessions --noinput
 python manage.py migrate admin --noinput
 
-echo "Running database initialization script..."
-python init_db.py
+echo "Running force migration script..."
+python force_migrate.py
 
 echo "Checking database tables..."
 python manage.py check_db

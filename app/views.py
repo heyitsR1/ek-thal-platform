@@ -96,15 +96,19 @@ class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 @csrf_protect
 def login_view(request):
-    if request.user.is_authenticated:
-        try:
-            profile = Profile.objects.get(user=request.user)
-            if profile.is_receiver:
-                return redirect('listings')
-            else:
-                return redirect('food_listing_form')
-        except Profile.DoesNotExist:
-            pass
+    try:
+        if request.user.is_authenticated:
+            try:
+                profile = Profile.objects.get(user=request.user)
+                if profile.is_receiver:
+                    return redirect('listings')
+                else:
+                    return redirect('food_listing_form')
+            except Profile.DoesNotExist:
+                pass
+    except Exception as e:
+        print(f"Database error in login view: {e}")
+        return render(request, 'maintenance.html')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -224,8 +228,12 @@ def listing_detail(request, listing_id):
     })
 
 def listings(request):
-    radius = request.GET.get('radius', '')
-    listings = FoodListing.objects.filter(status='approved')
+    try:
+        radius = request.GET.get('radius', '')
+        listings = FoodListing.objects.filter(status='approved')
+    except Exception as e:
+        print(f"Database error in listings view: {e}")
+        return render(request, 'maintenance.html')
     
     # Filter by distance if radius is provided and user is authenticated
     if radius and request.user.is_authenticated:
