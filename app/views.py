@@ -431,3 +431,17 @@ def user_profile_context(request):
         except Profile.DoesNotExist:
             return {'profile': None}
     return {'profile': None}
+
+def handler500(request, exception=None):
+    """Custom 500 error handler for debugging"""
+    import traceback
+    import sys
+    
+    # Log the error details
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    error_details = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+    
+    print(f"500 Error Details: {error_details}")
+    
+    # Return a simple error response
+    return render(request, '500.html', status=500)
