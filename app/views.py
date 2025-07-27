@@ -42,7 +42,15 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     return c * r
 
 def home(request):
-    return render(request, 'index.html')
+    try:
+        # Test database connection
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return render(request, 'index.html')
+    except Exception as e:
+        print(f"Database error in home view: {e}")
+        return render(request, 'maintenance.html')
 def about(request):
     return render(request, 'about.html')
 def signup(request):
@@ -435,7 +443,8 @@ def user_profile_context(request):
     except Exception as e:
         # Log the error but don't crash the app
         print(f"Context processor error: {e}")
-        return {'profile': None}
+        # Return empty context to prevent template errors
+        return {'profile': None, 'user': None}
 
 def handler500(request, exception=None):
     """Custom 500 error handler for debugging"""

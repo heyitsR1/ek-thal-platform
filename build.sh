@@ -14,6 +14,15 @@ python manage.py check --database default
 echo "Running migrations..."
 python manage.py migrate --noinput
 
+echo "Running Django system migrations..."
+python manage.py migrate auth --noinput
+python manage.py migrate contenttypes --noinput
+python manage.py migrate sessions --noinput
+python manage.py migrate admin --noinput
+
+echo "Running database initialization script..."
+python init_db.py
+
 echo "Checking database tables..."
 python manage.py check_db
 
