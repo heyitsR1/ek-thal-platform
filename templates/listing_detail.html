@@ -3,37 +3,95 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'styles.css' %}">
 {% endblock %}
+
 {% block content %}
 {% if not user.is_authenticated %}
 <div class="login-notice">
-  <p>You must be Logged In to continue this operation</p>
+  <p>🔒 You must be logged in to continue this operation</p>
 </div>
 {% endif %}
+
 <div class="listing-detail-container">
-  <h2>{{ listing.title }}</h2>
+  <header>
+    <h1>{{ listing.title }}</h1>
+  </header>
+  
   <div class="listing-detail-main">
     {% if listing.image %}
-      <img src="{{ listing.image.url }}" alt="Food Image" class="listing-image">
+      <div class="image-container">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }} - Food Image" class="listing-image">
+      </div>
     {% endif %}
+    
     <div class="listing-info">
-      <p><strong>Location:</strong> {{ listing.location }}</p>
-      <p><strong>Quantity:</strong> {{ listing.quantity }} kg</p>
-      <p><strong>Description:</strong> {{ listing.description }}</p>
-      <p><strong>Prepared At:</strong> {{ listing.prepared_at }}</p>
-      <p><strong>Storage:</strong> {{ listing.storage }}</p>
-      <p><strong>Prepared By:</strong> {{ listing.prepared_by }}</p>
-      <p><strong>Special Instructions:</strong> {{ listing.special_instructions|default:"None" }}</p>
-      {% if ai_summary %}<div class="ai-summary">{{ ai_summary|safe }}</div>{% endif %}
-      {% if ai_analysis %}<div class="ai-analysis">{{ ai_analysis|safe }}</div>{% endif %}
-      {% if user.is_authenticated and is_org and listing.id not in claimed_ids %}
-        <a href="{% url 'claim_listing' listing.id %}" class="btn-primary">Claim This Listing</a>
-      {% elif not user.is_authenticated %}
-        <a href="{% url 'login' %}" class="btn-primary">Login to Claim</a>
+      <div class="info-item">
+        <p><strong>📍 Location:</strong> {{ listing.location }}</p>
+      </div>
+      
+      <div class="info-item">
+        <p><strong>⚖️ Quantity:</strong> {{ listing.quantity }} kg</p>
+      </div>
+      
+      <div class="info-item">
+        <p><strong>📝 Description:</strong> {{ listing.description }}</p>
+      </div>
+      
+      <div class="info-item">
+        <p><strong>🕒 Prepared At:</strong> {{ listing.prepared_at }}</p>
+      </div>
+      
+      <div class="info-item">
+        <p><strong>🏪 Storage:</strong> {{ listing.storage }}</p>
+      </div>
+      
+      <div class="info-item">
+        <p><strong>👨‍🍳 Prepared By:</strong> {{ listing.prepared_by }}</p>
+      </div>
+      
+      <div class="info-item">
+        <p><strong>📋 Special Instructions:</strong> 
+          {% if listing.special_instructions %}
+            {{ listing.special_instructions }}
+          {% else %}
+            <span class="empty-value">None specified</span>
+          {% endif %}
+        </p>
+      </div>
+      
+      {% if ai_summary %}
+      <div class="ai-summary">
+        {{ ai_summary|safe }}
+      </div>
       {% endif %}
+      
+      {% if ai_analysis %}
+      <div class="ai-analysis">
+        {{ ai_analysis|safe }}
+      </div>
+      {% endif %}
+      
+      <div class="action-buttons">
+        {% if user.is_authenticated and is_org and listing.id not in claimed_ids %}
+          <a href="{% url 'claim_listing' listing.id %}" class="btn-primary">
+            🎯 Claim This Listing
+          </a>
+        {% elif not user.is_authenticated %}
+          <a href="{% url 'login' %}" class="btn-primary">
+            🔑 Login to Claim
+          </a>
+        {% else %}
+          <div class="claimed-notice">
+            <p>✅ This listing has been claimed</p>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
-  <div style="margin-top: 2rem; text-align: center;">
-    <a href="{% url 'listings' %}" class="btn-primary">Back to Listings</a>
-  </div>
+  
+  <footer class="listing-footer">
+    <a href="{% url 'listings' %}" class="btn-primary">
+      ← Back to All Listings
+    </a>
+  </footer>
 </div>
-{% endblock %} 
+{% endblock %}
