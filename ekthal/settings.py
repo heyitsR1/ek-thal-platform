@@ -145,6 +145,10 @@ WHITENOISE_AUTOREFRESH = True
 # Site URL for email notifications
 SITE_URL = config('SITE_URL', default='https://ek-thal.onrender.com')
 
+# Ensure SITE_URL is always set
+if not SITE_URL:
+    SITE_URL = 'https://ek-thal.onrender.com'
+
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
