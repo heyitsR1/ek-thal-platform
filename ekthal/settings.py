@@ -177,6 +177,28 @@ SITE_URL = 'https://ek-thal.onrender.com'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Cloudinary Configuration for production
+CLOUDINARY = {
+    'cloud_name': os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
+    'api_key': os.environ.get('CLOUDINARY_API_KEY', ''),
+    'api_secret': os.environ.get('CLOUDINARY_API_SECRET', ''),
+}
+
+# Use Cloudinary for media files in production
+if CLOUDINARY['cloud_name'] and CLOUDINARY['api_key'] and CLOUDINARY['api_secret']:
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+    
+    cloudinary.config(
+        cloud_name=CLOUDINARY['cloud_name'],
+        api_key=CLOUDINARY['api_key'],
+        api_secret=CLOUDINARY['api_secret']
+    )
+    
+    # Update media settings for Cloudinary
+    MEDIA_URL = f"https://res.cloudinary.com/{CLOUDINARY['cloud_name']}/image/upload/"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
