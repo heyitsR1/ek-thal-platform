@@ -16,7 +16,8 @@ from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 
@@ -48,11 +49,16 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
 }
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.onrender.com').split(',')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.onrender.com').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.onrender.com,ek-thal.onrender.com').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.onrender.com,https://ek-thal.onrender.com').split(',')
 
 # Application definition
 
@@ -167,7 +173,6 @@ STATICFILES_FINDERS = [
 ]
 
 # Enable Whitenoise compression and caching
-WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = True
 
 # Site URL for email notifications
@@ -186,18 +191,23 @@ CLOUDINARY = {
 
 # Use Cloudinary for media files in production
 if CLOUDINARY['cloud_name'] and CLOUDINARY['api_key'] and CLOUDINARY['api_secret']:
-    import cloudinary
-    import cloudinary.uploader
-    import cloudinary.api
-    
-    cloudinary.config(
-        cloud_name=CLOUDINARY['cloud_name'],
-        api_key=CLOUDINARY['api_key'],
-        api_secret=CLOUDINARY['api_secret']
-    )
-    
-    # Update media settings for Cloudinary
-    MEDIA_URL = f"https://res.cloudinary.com/{CLOUDINARY['cloud_name']}/image/upload/"
+    try:
+        import cloudinary
+        import cloudinary.uploader
+        import cloudinary.api
+        
+        cloudinary.config(
+            cloud_name=CLOUDINARY['cloud_name'],
+            api_key=CLOUDINARY['api_key'],
+            api_secret=CLOUDINARY['api_secret']
+        )
+        
+        # Update media settings for Cloudinary
+        MEDIA_URL = f"https://res.cloudinary.com/{CLOUDINARY['cloud_name']}/image/upload/"
+    except ImportError:
+        print("Warning: Cloudinary not installed. Using local media storage.")
+    except Exception as e:
+        print(f"Warning: Cloudinary configuration error: {e}. Using local media storage.")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
