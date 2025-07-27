@@ -29,6 +29,19 @@ class AppConfig(AppConfig):
                     print("✅ Migrations completed")
                 else:
                     print("✅ Database is up to date")
+                
+                # Create admin user if it doesn't exist
+                from django.contrib.auth.models import User
+                if not User.objects.filter(username='admin').exists():
+                    print("👤 Creating admin user...")
+                    User.objects.create_superuser(
+                        username='admin',
+                        email='admin@ekthal.com',
+                        password='1123'
+                    )
+                    print("✅ Admin user created")
+                else:
+                    print("✅ Admin user already exists")
                     
             except Exception as e:
                 print(f"⚠️ Migration check failed: {e}")
