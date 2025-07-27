@@ -15,5 +15,7 @@ services:
         value: .onrender.com
       - key: CSRF_TRUSTED_ORIGINS
         value: https://*.onrender.com
+      - key: RENDER
+        value: true
     healthCheckPath: /
     autoDeploy: true
