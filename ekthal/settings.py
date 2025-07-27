@@ -24,13 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default="django-insecure-$+25wb&&5p$pw2rz7ufyk-ol!#8ewyuy9m9-&h-86y7)p75c&8")
+SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure-$+25wb&&5p$pw2rz7ufyk-ol!#8ewyuy9m9-&h-86y7)p75c&8")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='https://127.0.0.1,https://localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.onrender.com').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.onrender.com').split(',')
 
 # Application definition
 
@@ -89,9 +89,10 @@ DATABASES = {
 }
 
 # Use PostgreSQL in production (Render)
-if config('DATABASE_URL', default=None):
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
     import dj_database_url
-    DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
+    DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
 
 
 # Password validation
@@ -143,11 +144,7 @@ WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = True
 
 # Site URL for email notifications
-SITE_URL = config('SITE_URL', default='https://ek-thal.onrender.com')
-
-# Ensure SITE_URL is always set
-if not SITE_URL:
-    SITE_URL = 'https://ek-thal.onrender.com'
+SITE_URL = 'https://ek-thal.onrender.com'
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
