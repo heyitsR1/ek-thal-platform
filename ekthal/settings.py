@@ -28,7 +28,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure-$+25wb&&5p$pw2rz7ufyk-ol!#8ewyuy9m9-&h-86y7)p75c&8")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 # Add logging for debugging
 LOGGING = {
@@ -57,8 +57,8 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.onrender.com,ek-thal.onrender.com').split(',')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.onrender.com,https://ek-thal.onrender.com').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.railway.app,.onrender.com,ek-thal.onrender.com').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.railway.app,https://*.onrender.com,https://ek-thal.onrender.com').split(',')
 
 # Application definition
 
@@ -74,7 +74,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "app.middleware.DatabaseErrorMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -83,6 +82,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# Add Whitenoise middleware only in production
+if not DEBUG:
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 ROOT_URLCONF = "ekthal.urls"
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -117,16 +120,19 @@ DATABASES = {
     }
 }
 
-# Use PostgreSQL in production (Render)
+# Use PostgreSQL in production (Railway + Neon)
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     try:
         import dj_database_url
         DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
+        print("Using PostgreSQL database from DATABASE_URL")
     except ImportError:
         print("Warning: dj-database-url not installed. Using SQLite.")
     except Exception as e:
         print(f"Warning: Database configuration error: {e}. Using SQLite.")
+else:
+    print("No DATABASE_URL found, using SQLite for development")
 
 
 # Password validation
@@ -165,19 +171,21 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-# Whitenoise configuration
+# Use Whitenoise only in production
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    # Enable Whitenoise compression and caching
+    WHITENOISE_AUTOREFRESH = True
+
+# Static files finders
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-# Enable Whitenoise compression and caching
-WHITENOISE_AUTOREFRESH = True
-
 # Site URL for email notifications
-SITE_URL = 'https://ek-thal.onrender.com'
+SITE_URL = os.environ.get('SITE_URL', 'https://ek-thal.onrender.com')
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'

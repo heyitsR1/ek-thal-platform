@@ -43,6 +43,7 @@ urlpatterns = [
     path("dashboard/approve-listing/<int:listing_id>/", views.dashboard_approve_listing, name="dashboard_approve_listing"),
 ]
 
-# Serve media files in development only
+# Serve static and media files in development only
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
