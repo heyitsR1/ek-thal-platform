@@ -523,7 +523,6 @@ def handler500(request, exception=None):
     # Return a simple error response
     return render(request, '500.html', status=500)
 
-<<<<<<< HEAD
 def health_check(request):
     """Simple health check endpoint for Railway"""
     try:
@@ -537,7 +536,7 @@ def health_check(request):
     except Exception as e:
         print(f"Health check failed: {e}")
         return HttpResponse(f"ERROR: {str(e)}", content_type="text/plain", status=500)
-=======
+
 def test_csrf(request):
     """Test view to verify CSRF is working"""
     if request.method == 'POST':
@@ -563,4 +562,3 @@ def debug_csrf(request):
     }
     
     return HttpResponse(f"<pre>{debug_info}</pre>")
->>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
