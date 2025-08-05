@@ -46,9 +46,18 @@ def home(request):
         from django.db import connection
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
+        
+        # Check if this is a health check request
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        if 'healthcheck' in user_agent.lower() or 'railway' in user_agent.lower():
+            return HttpResponse("OK", content_type="text/plain")
+        
         return render(request, 'index.html')
     except Exception as e:
         print(f"Database error in home view: {e}")
+        # For health checks, return error status
+        if 'healthcheck' in request.META.get('HTTP_USER_AGENT', '').lower():
+            return HttpResponse(f"ERROR: {str(e)}", content_type="text/plain", status=500)
         return render(request, 'maintenance.html')
 def about(request):
     return render(request, 'about.html')

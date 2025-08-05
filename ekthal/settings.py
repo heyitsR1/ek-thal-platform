@@ -177,6 +177,8 @@ if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
     # Enable Whitenoise compression and caching
     WHITENOISE_AUTOREFRESH = True
+    # Add Whitenoise middleware for production
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 # Static files finders
 STATICFILES_FINDERS = [

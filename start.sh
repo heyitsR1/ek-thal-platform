@@ -21,4 +21,8 @@ python create_admin.py
 echo "Starting Gunicorn server..."
 echo "Port: $PORT"
 echo "Database URL: $DATABASE_URL"
-gunicorn ekthal.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --access-logfile - 
+echo "Debug: $DEBUG"
+echo "Allowed Hosts: $ALLOWED_HOSTS"
+
+# Start with more verbose logging
+gunicorn ekthal.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --access-logfile - --error-logfile - --log-level debug 
