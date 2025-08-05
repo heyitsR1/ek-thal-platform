@@ -19,4 +19,6 @@ python create_admin.py
 
 # Start the application
 echo "Starting Gunicorn server..."
-gunicorn ekthal.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 
+echo "Port: $PORT"
+echo "Database URL: $DATABASE_URL"
+gunicorn ekthal.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --access-logfile - 

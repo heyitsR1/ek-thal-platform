@@ -9,8 +9,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.db.models import Q
 # from .utils import analyze_food_listing_with_gemini
-from django.http import HttpResponseForbidden
-import datetime
+from django.http import HttpResponseForbidden, HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail
 from django.conf import settings
@@ -467,3 +466,17 @@ def handler500(request, exception=None):
     
     # Return a simple error response
     return render(request, '500.html', status=500)
+
+def health_check(request):
+    """Simple health check endpoint for Railway"""
+    try:
+        # Test database connection
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            result = cursor.fetchone()
+        
+        return HttpResponse("OK", content_type="text/plain")
+    except Exception as e:
+        print(f"Health check failed: {e}")
+        return HttpResponse(f"ERROR: {str(e)}", content_type="text/plain", status=500)
