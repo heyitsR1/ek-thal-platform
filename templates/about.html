@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'about.css' %}">
+{% endblock extra_head %}
+{% block content %}
+<div class="aboutus-section">
+  <h1 class="aboutus-title">ABOUT US</h1>
+  <div class="aboutus-main">
+    <div class="aboutus-text">
+      <p>
+        <a >Ek Thal is a food-sharing platform built to 
+          tackle two major issues: food waste and hunger. In Nepal, large amounts of edible 
+          food are thrown away every day especially during festivals and social gatherings 
+          while many people still struggle to afford a proper meal.</a>
+      </p>
+      <p>
+        <a >With Ek Thal, anyone who has surplus food can quickly 
+          post details such as the type of food, quantity, freshness, and location. 
+          People in need daily wage workers, students, or NGOs can easily browse nearby listings and 
+          claim the food before it spoils.</a>
+      </p>
+      <p>
+        <a >Inspired by Nepal’s culture of generosity and hospitality, 
+          Ek Thal is a movement to reduce food waste, promote sustainability, and spread 
+          kindness. By connecting those who have extra to those who need it, we aim to turn 
+          surplus into smiles.</a>
+      </p>
+    </div>
+    <div class="aboutus-img">
+      <img src="{% static 'plate.png' %}" alt="Food plate illustration" />
+    </div>
+  </div>
+</div>
+
+<div class="mission-section">
+  <h2 class="mission-title">OUR MISSION</h2>
+  <div class="mission-cards">
+    <div class="mission-card">
+      <img src="{% static 'Group.png' %}" alt="Reduce Food Waste Icon" />
+      <p>Reduce Food Waste</p>
+    </div>
+    <div class="mission-card">
+      <img src="{% static 'community.png' %}" alt="Build Community Icon" />
+      <p>Build Community</p>
+    </div>
+    <div class="mission-card">
+      <img src="{% static 'kindness.png' %}" alt="Spread Kindness Icon" />
+      <p>Spread Kindness</p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

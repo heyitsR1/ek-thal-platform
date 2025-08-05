@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Left Branding Section */
+.left {
+  flex: 1;
+  padding: 3em;
+  background: white;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.branding .brand-en {
+  color: #e25e27;
+  font-weight: 700;
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+}
+
+.branding .brand-hi {
+  font-size: 2em;
+  font-weight: bold;
+  color: red;
+  text-shadow: 2px 2px #fcb900;
+}
+
+.illustration img {
+  max-width: 90%;
+  height: auto;
+}
+
+/* Right Form Section */
+.right {
+  flex: 1;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #439249;
+  padding: 2em;
+}
+
+.login-form {
+  width: 80%;
+  max-width: 350px;
+  background: transparent;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.login-form h1 {
+  font-size: 2.5em;
+  font-weight: 700;
+  text-align: left;
+}
+
+.login-form h2 {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+
+.login-form input {
+  padding: 1em;
+  border: none;
+  border-radius: 2em;
+  background-color: #eaeaea;
+  font-size: 0.9em;
+  color: #444;
+  letter-spacing: 0.1em;
+}
+
+.login-form input::placeholder {
+  color: #b88989;
+  text-transform: uppercase;
+}
+
+/* Buttons */
+.login-form button[type="submit"] {
+  background-color: white;
+  color: #439249;
+  font-weight: bold;
+  border: none;
+  border-radius: 2em;
+  padding: 0.8em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button[type="submit"]:hover {
+  background-color: #e2e2e2;
+}
+
+/* Google button */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  border: none;
+  border-radius: 2em;
+  background-color: #eaeaea;
+  color: #888;
+  padding: 0.8em;
+  cursor: pointer;
+}
+
+.google-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Signup Link */
+.signup-link {
+  font-size: 0.9em;
+  text-align: center;
+  color: white;
+}
+
+.signup-link a {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Wave background on the right */
+.wave-bg {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.wave-bg svg {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Food Donation Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #439249 0%, #5ba854 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .thank-you-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .heart-icon::before {
+            content: "❤️";
+            font-size: 36px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .main-heading {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #439249;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sub-heading {
+            font-size: 1.4rem;
+            color: #f97316;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #439249, #5ba854);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 16px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 20px rgba(67, 146, 73, 0.2);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #f97316;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-section {
+            position: relative;
+            z-index: 10;
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: white;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #439249;
+            border: 2px solid #439249;
+        }
+
+        .btn-secondary:hover {
+            background: #439249;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .social-sharing {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .social-text {
+            color: #718096;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        .social-btn.facebook { background: #4267B2; }
+        .social-btn.twitter { background: #1DA1F2; }
+        .social-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-btn.linkedin { background: #0077B5; }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            {% comment %} pointer-events: none; {% endcomment %}
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .thank-you-card {
+                padding: 40px 25px;
+                margin: 10px;
+            }
+
+            .main-heading {
+                font-size: 2.2rem;
+            }
+
+            .sub-heading {
+                font-size: 1.2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .impact-stats {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-heading {
+                font-size: 1.8rem;
+            }
+
+            .heart-icon {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 20px;
+            }
+
+            .heart-icon::before {
+                font-size: 28px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element">🍎</div>
+        <div class="floating-element">🥕</div>
+        <div class="floating-element">🍞</div>
+    </div>
+
+    <div class="container">
+        <div class="thank-you-card">
+            <div class="heart-icon"></div>
+            
+            <h1 class="main-heading">Thank You!</h1>
+            <h2 class="sub-heading">Your generosity makes a difference</h2>
+            
+            <p class="message">
+                Your food donation will help feed families in need and reduce food waste in our community. 
+                Together, we're building a world where no one goes hungry and nothing goes to waste.
+            </p>
+
+            <div class="impact-stats">
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Meals Provided</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Families Helped</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">75kg</div>
+                    <div class="stat-label">Food Saved</div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <p class="message">Want to make an even bigger impact?</p>
+                
+                <div class="cta-buttons">
+                    <a href="/" class="btn btn-primary">
+                        🍽️ Donate Again
+                    </a>
+                    <a href="/contact" class="btn btn-secondary">
+                        👥 Volunteer With Us
+                    </a>
+                </div>
+            </div>
+
+            <div class="social-sharing">
+                <p class="social-text">Share your good deed and inspire others:</p>
+                <div class="social-buttons">
+                    <a href="#" class="social-btn facebook" title="Share on Facebook">f</a>
+                    <a href="#" class="social-btn twitter" title="Share on Twitter">🐦</a>
+                    <a href="#" class="social-btn instagram" title="Share on Instagram">📷</a>
+                    <a href="#" class="social-btn linkedin" title="Share on LinkedIn">in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats on scroll/load
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const finalNumber = stat.textContent;
+                stat.textContent = '0';
+                
+                setTimeout(() => {
+                    animateNumber(stat, finalNumber);
+                }, 500);
+            });
+        });
+
+        function animateNumber(element, target) {
+            const numericTarget = parseInt(target);
+            const duration = 2000;
+            const step = numericTarget / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= numericTarget) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current) + (target.includes('kg') ? 'kg' : '+');
+                }
+            }, 16);
+        }
+
+        document.querySelectorAll('.btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+              if (this.tagName !== 'A') {
+                  e.preventDefault(); // only prevent for non-links
+              }
+              this.style.transform = 'scale(0.95)';
+              setTimeout(() => {  
+                  this.style.transform = '';
+              }, 150);
+          });
+      });
+    </script>
+</body>
+</html> 

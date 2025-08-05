@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block title %}My Claimed Listings - EkThal{% endblock %}
+
+{% block content %}
+    <main>
+        <h2><i class="fas fa-check-circle"></i> My Claimed Listings</h2>
+        <div class="listings">
+            {% for claim in claimed %}
+                <div class="listing-card claimed-listing">
+                    <div class="claimed-badge">
+                        <i class="fas fa-check-circle"></i> Claimed
+                    </div>
+                    
+                    {% if claim.food_listing.image %}
+                        <img src="{{ claim.food_listing.image.url }}" alt="Food Image" class="listing-img" style="max-width:200px; max-height:150px;">
+                    {% endif %}
+                    <h3>{{ claim.food_listing.title }}</h3>
+                    <p><strong>Location:</strong> {{ claim.food_listing.location|truncatechars:50 }}</p>
+                    <p><strong>Quantity:</strong> {{ claim.food_listing.quantity }} kg</p>
+                    <p><strong>Prepared At:</strong> {{ claim.food_listing.prepared_at|date:"M d, Y H:i" }}</p>
+                    <p><strong>Description:</strong> {{ claim.food_listing.description|truncatechars:100 }}</p>
+                    <p><strong>Claimed At:</strong> {{ claim.claimed_at|date:"M d, Y H:i" }}</p>
+                    <a href="/connection/{{ claim.id }}/" class="btn-primary" style="margin-top:0.5em; display:inline-block;">
+                        <i class="fas fa-handshake"></i> View Connection
+                    </a>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Claimed Listings</h3>
+                    <p>You have not claimed any listings yet. <a href="/listings/">Browse available food</a></p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}

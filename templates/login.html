@@ -1,0 +1,565 @@
+<!-- login.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+      min-height: 100vh;
+      overflow-x: hidden;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Override any base template containers */
+    .container, .main-content, .wrapper {
+      max-width: none !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(226, 94, 39, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      min-height: 60px;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ffffff;      
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .navbar .logo img {
+      height: 40px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      border-radius: 50%;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: nowrap;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .navbar nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 0.8rem;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    .navbar nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(67, 146, 73, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .navbar nav a:hover::before {
+      left: 100%;
+    }
+
+    .navbar nav a:hover {
+      color: #ffffff;
+    }
+
+    .navbar nav .logout-link {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      color: white !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .navbar nav .logout-link:hover {
+      background: linear-gradient(135deg, #5cb85c 0%, #439249 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 146, 73, 0.3);
+    }
+
+    /* Main Container */
+    .main-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      padding-top: 60px;
+    }
+
+    /* Left Section - Branding */
+    .left-section {
+      flex: 1;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(67, 146, 73, 0.05) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .branding {
+      text-align: center;
+      z-index: 2;
+      position: relative;
+      transform: translateY(50px);
+    }
+
+    .brand-en {
+      color: #e25e27;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    .brand-hi {
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #e25e27 0%, #ff6b35 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 2rem;
+      text-shadow: 0 4px 8px rgba(226, 94, 39, 0.3);
+    }
+
+    .illustration {
+      z-index: 2;
+      position: relative;
+      transform: translateY(50px);
+    }
+
+    .illustration img {
+      max-width: 600px;
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+      transition: transform 0.3s ease;
+    }
+
+    .illustration img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Right Section - Login Form */
+    .right-section {
+      flex: 1;
+      background: linear-gradient(135deg, #439249 0%, #5cb85c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .right-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      opacity: 0.1;
+    }
+
+    .login-form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      padding: 3rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .login-form h1 {
+      color: #ffffff;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .login-form h2 {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid transparent;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .form-input::placeholder {
+      color: #888;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+    }
+
+    .form-input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      color: #439249;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-top:25px;
+    }
+
+    .login-btn:hover {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #f8f9fa 0%,rgb(208, 225, 243) 100%);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      background: rgba(248, 215, 218, 0.95);
+      color: #721c24;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      border-left: 4px solid #dc3545;
+    }
+
+    .signup-link {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.95rem;
+    }
+
+    .signup-link a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .signup-link a:hover {
+      border-bottom-color: #ffffff;
+    }
+
+    /* Decorative Elements */
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .floating-circle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: floatUp 8s infinite linear;
+    }
+
+    .floating-circle:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-circle:nth-child(2) {
+      width: 40px;
+      height: 40px;
+      left: 80%;
+      animation-delay: 2s;
+    }
+
+    .floating-circle:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      left: 50%;
+      animation-delay: 4s;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0);
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0.8rem 1rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        min-height: auto;
+      }
+      
+      .navbar .logo {
+        font-size: 1.2rem;
+        gap: 0.3rem;
+      }
+      
+      .navbar .logo img {
+        height: 25px;
+      }
+      
+      .navbar nav {
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        margin-left: auto;
+      }
+      
+      .navbar nav a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+      }
+      
+      .navbar nav .logout-link {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        gap: 0.2rem;
+      }
+      
+      .main-container {
+        flex-direction: column;
+        padding-top: 120px;
+      }
+      
+      .left-section {
+        min-height: 40vh;
+        padding: 2rem;
+      }
+      
+      .brand-hi {
+        font-size: 2.5rem;
+      }
+      
+      .illustration img {
+        max-width: 200px;
+      }
+      
+      .right-section {
+        min-height: 60vh;
+        padding: 2rem;
+      }
+      
+      .login-form {
+        padding: 2rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<!-- Override any base template styles -->
+<style>
+  /* Force full screen for login page */
+  .main-content, .container, .wrapper, body > div {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+</style>
+
+<!-- Navbar -->
+<header class="navbar">
+  <div class="logo" style="color:white;">EkThal</div>
+    <!-- <img src="{% static 'Logo.png' %}" alt="Ek Thaal Logo">
+  </div> -->
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    {% if user.is_authenticated %}
+      <a href="/listings/">Listings</a>
+      {% with profile=user.profile %}
+        {% if not profile.is_receiver %}
+          <a href="/food_listing_form/">Donate</a>
+        {% endif %}
+        {% if profile.is_receiver %}
+          <a href="/listings/">Claim</a>
+        {% endif %}
+      {% endwith %}
+      <a href="/logout/" class="logout-link">
+        <i class="fas fa-user-circle"></i>
+        {{ user.username|slice:":3"|upper }}
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    {% else %}
+      <a href="/contact/">Contact</a>
+    {% endif %}
+  </nav>
+</header>
+
+<!-- Main Login Container -->
+<div class="main-container">
+  <!-- Left Section - Branding -->
+  <div class="left-section">
+    <div class="branding">
+      <div class="brand-en">EK THAAL</div>
+      <div class="brand-hi">एक थाल</div>
+    </div>
+    <div class="illustration">
+      <img src="{% static 'logo.png' %}" alt="Ek Thaal Illustration" />
+    </div>
+  </div>
+
+  <!-- Right Section - Login Form -->
+  <div class="right-section">
+    <div class="floating-elements">
+      <div class="floating-circle"></div>
+      <div class="floating-circle"></div>
+      <div class="floating-circle"></div>
+    </div>
+    
+    <form class="login-form" method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <h1>LOGIN</h1>
+      <h2>WELCOME BACK</h2>
+
+      {% if error %}
+        <div class="error-message">
+          {{ error }}
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        <input type="text" name="username" class="form-input" placeholder="Username" required>
+      </div>
+
+      <div class="form-group">
+        <input type="password" name="password" class="form-input" placeholder="Password" required>
+      </div>
+
+      <button type="submit" class="login-btn">Login</button>
+
+      <div class="signup-link">
+        Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>    <link rel="icon" href="{% static 'plate.png' %}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ek Thaal</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+          <div class="logo-container">
+            <div class="logo_img"><img src="{% static 'Finnnal_logo.svg' %}" alt="Ek Thaal Logo" class="logo-img"></div>
+        </div>
+        <a href="/contact" class="login-btn">Get in Touch</a>
+    </header>
+    <!-- Main Content -->
+    <main class="main-content" style="margin-top: 1rem;">
+        <h1 class="heading drop-animate" id="drop-heading">
+          <span class="drop-word" id="drop-post">POST.</span> 
+          <span class="drop-word" id="drop-share">SHARE.</span> 
+          <span class="drop-word" id="drop-care">CARE.</span>
+        </h1>
+
+        <p class="subheading">CONNECTING SURPLUS MEALS TO EMPTY PLATES ACROSS NEPAL.</p>
+
+        <div class="wave-buttons">
+          <a href="{% if user.is_authenticated and profile and not profile.is_receiver %}/food_listing_form/{% else %}/login?next=/food_listing_form/{% endif %}" class="donate-btn">Donate Food</a>
+          <a href="/listings/" class="claim-btn">Claim Food</a>
+      </div>
+    </main>
+    <div class="wave-container">
+        <svg viewBox="0 0 1439 712" fill="none" xmlns="http://www.w3.org/2000/svg" class="wave-svg">
+            <path d="M430.468 95.8733C197.141 -72.3814 -15.5 66.6588 -15.5 152.138V711H1435.41C1435.41 711 1441.91 420.659 1435.41 66.6588C1369.97 218.882 1268.6 310.733 1220.92 169.45C1160.66 -9.1396 1052.63 -25.1336 921.941 26.0832C863.546 48.9673 793.11 131.172 752.451 152.138C698.154 230.574 632.219 241.357 430.468 95.8733Z" fill="#439249"/>
+        </svg>
+        <div class="hands-svg-container">
+            <img src="{% static 'hands.svg' %}" alt="Hands" class="hands-svg" />
+        </div>
+        <!-- Buttons on the wave -->
+    </div>
+  
+    <!-- SVG Wave -->
+
+    <!-- Ek Thaal Intro Section -->
+<section class="ekthaal-intro">
+  <div class="ekthaal-text">
+    <div class="ekthaal-heading-nep">के हो?</div>
+    <div class="ekthaal-heading-en">EK THAAL</div>
+    <p class="ekthaal-desc">
+      Ek Thal is a community driven food sharing platform that connects those with surplus food to those who need it. Our mission is simple, reduce food waste and spread kindness, one plate at a time. What’s extra for you could mean a full meal for someone else.
+    </p>
+    <a href="/about" class="readmore-btn">Read More</a>
+  </div>
+  <div class="ekthaal-illustration">
+    <!-- Simple SVG illustration of hands sharing a plate -->
+    <img src="{% static 'handsnew.svg' %}" alt="Hands Sharing Plate" class="ekthaal-svg">
+    </svg>
+  </div>
+</section>
+
+<footer class="ekthaal-minimal-footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <span class="footer-logo">Ek Thal</span>
+      <span class="footer-tagline">One Plate, Many Smiles</span>
+    </div>
+    <nav class="footer-nav">
+      <a href="/">Home</a>
+      <a href="{% if user.is_authenticated and profile and not profile.is_receiver %}/food_listing_form/{% else %}/login?next=/food_listing_form/{% endif %}">Post Food</a>
+      <a href="/listings">Claim Food</a>
+      <a href="/about">About Us</a>
+    </nav>
+    <div class="footer-social">
+  <a href="#" aria-label="Facebook">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 12.07C22 6.48 17.52 2 12 2S2 6.48 2 12.07c0 5.02 3.66 9.16 8.44 9.93v-7.03h-2.54v-2.9h2.54V9.84c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34v7.03C18.34 21.23 22 17.09 22 12.07z"/>
+    </svg>
+  </a>
+  <a href="#" aria-label="Instagram">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="5" fill="#388e3c"/>
+      <circle cx="17" cy="7" r="1.5" />
+    </svg>
+  </a>
+  <a href="#" aria-label="Twitter">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 11.07 9c0 .34.04.67.1.99C7.69 9.8 4.84 8.13 2.98 5.7c-.37.64-.58 1.39-.58 2.19 0 1.51.77 2.85 1.95 3.63a4.28 4.28 0 0 1-1.94-.54v.05c0 2.11 1.5 3.87 3.5 4.27-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.69 2.11 2.92 3.97 2.95A8.6 8.6 0 0 1 2 19.54a12.13 12.13 0 0 0 6.56 1.92c7.88 0 12.2-6.53 12.2-12.2 0-.19 0-.39-.01-.58A8.72 8.72 0 0 0 24 4.59a8.48 8.48 0 0 1-2.54.7z"/>
+    </svg>
+  </a>
+</div>
+  </div>
+  <div class="footer-bottom">
+    Made with <span style="color:#fb923c;">❤️</span> at DAV Codefest 2025 by Team badUSB
+  </div>
+</footer>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const words = [
+      document.getElementById('drop-post'),
+      document.getElementById('drop-share'),
+      document.getElementById('drop-care')
+    ];
+    words.forEach(word => {
+      word.style.opacity = 0;
+      word.style.transform = 'translateY(-60px)';
+      word.style.display = 'inline-block';
+      word.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s';
+    });
+    function dropWord(i) {
+      if (i >= words.length) return;
+      setTimeout(() => {
+        words[i].style.opacity = 1;
+        words[i].style.transform = 'translateY(0)';
+        dropWord(i + 1);
+      }, 350);
+    }
+    dropWord(0);
+  });
+</script>
+
+</body>
+</html>

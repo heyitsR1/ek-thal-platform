@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'admin_dashboard.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="approval-page">
+  <div class="approval-card">
+    <h2><i class="fas fa-clipboard-check"></i> Review Listing: {{ listing.title }}</h2>
+    
+    <div class="approval-section">
+      <h3><i class="fas fa-info-circle"></i> Listing Details</h3>
+      <div class="approval-grid">
+        <div class="approval-item">
+          <div class="label">Location</div>
+          <div class="value">{{ listing.location }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Quantity</div>
+          <div class="value">{{ listing.quantity }} kg</div>
+        </div>
+        <div class="approval-item">
+        <div class="approval-item">
+          <div class="label">Prepared At</div>
+          <div class="value">{{ listing.prepared_at|date:"M d, Y H:i"|default:"Not specified" }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Storage Method</div>
+          <div class="value">{{ listing.storage|default:"Not specified" }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Prepared By</div>
+          <div class="value">{{ listing.prepared_by|default:"Not specified" }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Recurring</div>
+          <div class="value">{{ listing.recurring|yesno:"Yes,No" }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Status</div>
+          <div class="value">
+            <span class="status-badge status-{{ listing.status }}">{{ listing.status|title }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approval-section">
+      <h3><i class="fas fa-align-left"></i> Description</h3>
+      <div class="description">
+        {{ listing.description|default:"No description provided" }}
+      </div>
+    </div>
+
+    <div class="approval-section">
+      <h3><i class="fas fa-exclamation-triangle"></i> Special Instructions</h3>
+      <div class="description">
+        {% if listing.special_instructions %}
+          {{ listing.special_instructions }}
+        {% else %}
+          None
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="approval-section">
+      <h3><i class="fas fa-user"></i> Donor Contact Information</h3>
+      <div class="approval-grid">
+        <div class="approval-item">
+          <div class="label">Username</div>
+          <div class="value">{{ listing.donor.user.username }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Email</div>
+          <div class="value">{{ listing.donor.user.email }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Phone 1</div>
+          <div class="value">{{ listing.donor.phone_number_1 }}</div>
+        </div>
+        {% if listing.donor.phone_number_2 %}
+          <div class="approval-item">
+            <div class="label">Phone 2</div>
+            <div class="value">{{ listing.donor.phone_number_2 }}</div>
+          </div>
+        {% endif %}
+        <div class="approval-item">
+          <div class="label">Organization</div>
+          <div class="value">{{ listing.donor.is_organization|yesno:"Yes,No" }}</div>
+        </div>
+        <div class="approval-item">
+          <div class="label">Submitted</div>
+          <div class="value">{{ listing.created_at|date:"M d, Y H:i" }}</div>
+        </div>
+      </div>
+    </div>
+
+    {% if listing.image %}
+      <div class="approval-section">
+        <h3><i class="fas fa-image"></i> Food Image</h3>
+        <img src="{{ listing.image.url }}" alt="Food Image" style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+      </div>
+    {% endif %}
+
+    <form method="post" class="approval-actions">
+      {% csrf_token %}
+      <button type="submit" name="action" value="approve" class="btn btn-approve">
+        <i class="fas fa-check"></i> Approve Listing
+      </button>
+      <button type="submit" name="action" value="reject" class="btn btn-reject">
+        <i class="fas fa-times"></i> Reject Listing
+      </button>
+      <a href="{% url 'dashboard_pending_listings' %}" class="btn btn-back">
+        <i class="fas fa-arrow-left"></i> Back to Pending
+      </a>
+    </form>
+  </div>
+</div>
+{% endblock %} 

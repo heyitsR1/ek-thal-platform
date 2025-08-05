@@ -1,0 +1,356 @@
+/* Import Montserrat font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Global styles */
+body {
+    background: url('/static/bg.svg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* Title */
+.title {
+    text-align: center;
+    color: #4e944f;
+    margin-top: 50px;
+    margin-bottom: 40px;
+    font-size: 4em;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+/* Login notice */
+.login-notice {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #ff6b6b;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 2rem auto;
+    max-width: 700px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.login-notice p {
+    color: #d32f2f;
+    font-weight: 300;
+    margin: 0;
+    font-size: 1.1em;
+}
+
+/* Main container */
+.listings-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Filter form */
+.filter-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    backdrop-filter: blur(10px);
+}
+
+.filter-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.filter-form input:focus {
+    outline: none;
+    border-color: #4e944f;
+}
+
+.filter-form button {
+    background: #4e944f;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.filter-form button:hover {
+    background: #357a38;
+}
+
+/* Listings grid */
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Food card */
+.food-card {
+    background: #ffe5a5;;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    padding: 20px 24px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    gap: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-height: 140px;
+}
+
+.food-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* Claimed badge */
+.claimed-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #4caf50;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.claimed-badge i {
+    font-size: 1em;
+}
+
+/* Claimed card styling */
+.food-card.claimed {
+    opacity: 0.8;
+    position: relative;
+}
+
+.food-card.claimed .claim-btn {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.food-card.claimed .claim-btn:hover {
+    background: #6c757d;
+    transform: none;
+}
+
+/* Food image */
+.food-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+/* Food info */
+.food-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.food-title {
+    color: #388e3c;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.food-qty,
+.food-location,
+.food-type {
+    color: #444;
+    font-size: 0.95em;
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+.food-best-before {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+    margin-top: 2px;
+    font-weight: 500;
+}
+
+/* Status bar */
+.food-status-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.status-dot.fresh {
+    background: #4e944f;
+    border: 2px solid #388e3c;
+}
+
+.status-text {
+    color: #388e3c;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+/* Card actions */
+.card-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.claim-btn,
+.details-btn {
+    background: #4e944f;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    min-width: 90px;
+}
+
+.claim-btn:hover,
+.details-btn:hover {
+    background: #357a38;
+}
+
+.details-btn {
+    background: #6c757d;
+    min-width: 110px;
+}
+
+.details-btn:hover {
+    background: #545862;
+}
+
+/* No listings message */
+.no-listings {
+    grid-column: 1 / -1;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.no-listings p {
+    color: #666;
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .listings-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5em;
+        margin-top: 30px;
+    }
+    
+    .listings-container {
+        padding: 0 20px;
+    }
+    
+    .listings-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .food-card {
+        padding: 18px;
+        gap: 16px;
+        min-height: 120px;
+    }
+    
+    .food-img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .food-title {
+        font-size: 1.3em;
+    }
+    
+    .card-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .claim-btn,
+    .details-btn {
+        min-width: auto;
+    }
+    
+    .filter-form {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .food-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .food-info {
+        align-items: center;
+    }
+    
+    .food-status-bar {
+        justify-content: center;
+    }
+}

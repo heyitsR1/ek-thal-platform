@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h1>Server Error (500)</h1>
+    <p>Something went wrong on our end. Please try again later.</p>
+    <a href="{% url 'home' %}" style="color: #007bff; text-decoration: none;">Return to Home</a>
+</div>
+{% endblock %} 

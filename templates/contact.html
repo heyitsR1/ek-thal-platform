@@ -1,0 +1,367 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="icon" href="{% static 'plate.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'contact.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f6f0 url("{% static 'bg.svg' %}") repeat top left;
+            background-size: 600px 600px;
+        }
+        .contact-bg-illustration {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .contact-bg-hands {
+            left: 0;
+            bottom: 0;
+            width: 320px;
+            opacity: 0.10;
+        }
+        .contact-bg-plate {
+            right: 0;
+            top: 0;
+            width: 220px;
+            opacity: 0.10;
+        }
+        .contact-bg-kindness {
+            right: 0;
+            bottom: 0;
+            width: 180px;
+            opacity: 0.08;
+        }
+        @media (max-width: 900px) {
+            .contact-bg-hands { width: 180px; }
+            .contact-bg-plate { width: 120px; }
+            .contact-bg-kindness { width: 90px; }
+        }
+        @media (max-width: 600px) {
+            .contact-bg-hands, .contact-bg-plate, .contact-bg-kindness { display: none; }
+        }
+        .contact-hero, .map-section, .faq-section, .footer-section { position: relative; z-index: 2; }
+    </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">EkThal</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        {% if user.is_authenticated %}
+            <a href="/listings/">Listings</a>
+            {% with profile=user.profile %}
+                {% if not profile.is_receiver %}
+                    <a href="/food_listing_form/">Donate</a>
+                {% endif %}
+                {% if profile.is_receiver %}
+                    <a href="/listings/">Claim</a>
+                {% endif %}
+            {% endwith %}
+            <a href="/logout/" class="logout-link">
+                <i class="fas fa-user-circle"></i>
+                {{ user.username|slice:":3"|upper }}
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        {% else %}
+            <a href="/login/">Login</a>
+        {% endif %}
+    </nav>
+</header>
+    <!-- Decorative Background Illustrations -->
+    <img src="{% static 'hands.svg' %}" alt="Hands Illustration" class="contact-bg-illustration contact-bg-hands">
+    <img src="{% static 'plate.png' %}" alt="Plate Illustration" class="contact-bg-illustration contact-bg-plate">
+    <img src="{% static 'kindness.png' %}" alt="Kindness Illustration" class="contact-bg-illustration contact-bg-kindness">
+
+    <!-- Get in touch section -->
+    <section class="contact-hero">
+        <div class="container">
+            <h1 class="main-title">Get in touch</h1>
+            <div class="contact-content">
+                <div class="contact-form-section">
+                    <h2 class="section-title">Send a Message</h2>
+                    {% if success %}
+                        <div style="background:#e6f9ed;color:#226b36;padding:12px 18px;border-radius:6px;margin-bottom:18px;font-weight:500;">Thank you for reaching out! Your message has been sent. We'll get back to you soon.</div>
+                    {% elif error %}
+                        <div style="background:#ffeaea;color:#b71c1c;padding:12px 18px;border-radius:6px;margin-bottom:18px;font-weight:500;">{{ error }}</div>
+                    {% endif %}
+                    <p class="section-description">
+                        Have questions, want to partner, or need help using Ek Thaal? We're here to support you in reducing food waste and spreading kindness. Fill out the form below and our team will get back to you as soon as possible.
+                    </p>
+                    <form class="contact-form" id="contactForm" action="https://formspree.io/f/mwpqoaoa" method="post">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <input type="text" id="name" name="name" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half-width">
+                                <select id="interest" name="interest" required>
+                                    <option value="">Interested in</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="support">Support</option>
+                                    <option value="partnership">Partnership</option>
+                                    <option value="volunteering">Volunteering</option>
+                                    <option value="media">Media/Press</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group half-width">
+                                <input type="tel" id="phone" name="phone" placeholder="Phone Number">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <textarea id="message" name="message" placeholder="Message" rows="5" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" class="submit-btn">
+                                <svg class="submit-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="contact-info-section">
+                    <div class="contact-info-item">
+                        <h3 class="info-title">Call Us</h3>
+                        <p class="info-description">Reach out for support, partnerships, or to learn how you can help fight food waste in your community.</p>
+                        <div class="contact-detail">
+                            <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="contact-text">+977-9804210229</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <h3 class="info-title">Visit Us</h3>
+                        <p class="info-description">Our team is based in Kathmandu, Nepal. Drop by or send us a letter!</p>
+                        <div class="contact-detail">
+                            <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="contact-text">Bijuli Bazaar, Kathmandu, Nepal</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <h3 class="info-title">Live Chat</h3>
+                        <p class="info-description">Chat with our volunteers for quick help, food safety tips, or to join our kindness movement.</p>
+                        <div class="contact-detail">
+                            <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="contact-text">Start Chat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map section -->
+    <section class="map-section">
+        <div class="container">
+            <div id="map" class="map-container"></div>
+        </div>
+    </section>
+
+    <!-- FAQ section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="faq-content">
+                <div class="faq-header">
+                    <span class="faq-subtitle">FAQ</span>
+                    <h2 class="faq-title">Frequently asked<br>questions.</h2>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How can I donate surplus food?</h3>
+                            <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <p class="faq-answer">Simply register as a donor, fill out the food listing form with details about your surplus food, and submit. Our team will review and approve your listing for the community to see.</p>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Who can claim food on Ek Thaal?</h3>
+                            <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <p class="faq-answer">Any registered organization, NGO, or community group can claim available food listings to help those in need in their area.</p>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Is there a cost to use Ek Thaal?</h3>
+                            <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <p class="faq-answer">No, Ek Thaal is a free platform for both donors and receivers. Our goal is to build a kinder, more sustainable Nepal.</p>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How do you ensure food safety?</h3>
+                            <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <p class="faq-answer">All listings are reviewed by our team. We encourage donors to provide accurate information about preparation time, storage, and special instructions. Organizations are also encouraged to inspect food before distribution.</p>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How can I get involved as a volunteer?</h3>
+                            <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <p class="faq-answer">We welcome volunteers! Reach out via the form above or join our live chat to learn about current opportunities to help spread kindness in your community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer section -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <h2 class="footer-title">Join Ek Thaal Today.<br>Getting More Done Together.</h2>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-info">
+                        <div class="footer-item">
+                            <span class="footer-label">Address</span>
+                            <span class="footer-text">Bijuli Bazaar, Kathmandu, Nepal</span>
+                        </div>
+                        <div class="footer-item">
+                            <span class="footer-label">Phone Number</span>
+                            <span class="footer-text">+977-9804210229</span>
+                        </div>
+                        <div class="footer-item">
+                            <span class="footer-label">Email</span>
+                            <span class="footer-text">hello@ekthaal.com</span>
+                        </div>
+                        <div class="footer-item">
+                            <span class="footer-label">Follow</span>
+                            <div class="social-icons">
+                                <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.94C18.88 4 12 4 12 4s-6.88 0-8.6.48a2.78 2.78 0 0 0-1.94 1.94A29 29 0 0 0 0 12.01a29 29 0 0 0 .46 5.59A2.78 2.78 0 0 0 3.4 19.4c1.72.48 8.6.48 8.6.48s6.88 0 8.6-.48a2.78 2.78 0 0 0 1.94-1.94c.37-2.16.37-4.34.46-5.59a29 29 0 0 0-.46-5.59z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <polygon points="9.75,15.02 15.5,12.01 9.75,9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'contact.js' %}"></script>
+    <script>
+        // Fallback map implementation without API key
+        function initMap() {
+            const mapContainer = document.getElementById('map');
+            if (mapContainer) {
+                mapContainer.innerHTML = `
+                    <div style="
+                        width: 100%; 
+                        height: 100%; 
+                        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        color: #6c757d;
+                        font-family: 'Inter', sans-serif;
+                        border-radius: 8px;
+                        position: relative;
+                        overflow: hidden;
+                    ">
+                        <div style="
+                            position: absolute;
+                            top: 20px;
+                            left: 20px;
+                            background: white;
+                            padding: 8px 12px;
+                            border-radius: 4px;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                            font-size: 12px;
+                            font-weight: 500;
+                        ">
+                            Kathmandu, Nepal
+                        </div>
+                        <div style="
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            text-align: center;
+                        ">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 16px; opacity: 0.6;">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="#226b36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="10" r="3" stroke="#226b36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #226b36;">
+                                Ek Thaal Headquarters
+                            </div>
+                            <div style="font-size: 14px; color: #6c757d;">
+                                1034 Divi St, #100<br>Kathmandu, Nepal
+                            </div>
+                        </div>
+                        <div style="
+                            position: absolute;
+                            bottom: 20px;
+                            right: 20px;
+                            background: white;
+                            padding: 8px 12px;
+                            border-radius: 4px;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                            font-size: 12px;
+                            color: #6c757d;
+                        ">
+                            Interactive map coming soon
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Initialize map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+        });
+    </script>
+</body>
+</html>

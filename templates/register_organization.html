@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'register_organization.css' %}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% endblock %}
+
+
+{% block content %}
+<div class="container auth-page" style= "background-color: #ffffff; padding: 20px; border-radius: 15px;">
+  <div class="form-box">
+    <h2>Organization Registration</h2>
+
+    {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+      <div class="alert alert-success">
+        Registration successful! You can now <a href="{% url 'login' %}">login</a>.
+      </div>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      <label>Organization Name:
+        <input type="text" name="organization_name" required>
+      </label>
+      <label>Organization Type:
+        <select name="organization_type" required>
+          <option value="">Select Organization Type</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="catering">Catering Service</option>
+          <option value="hotel">Hotel</option>
+          <option value="school">School/University</option>
+          <option value="office">Office/Corporate</option>
+          <option value="event">Event Organizer</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>Organization Address:
+        <textarea name="organization_address" required></textarea>
+      </label>
+      <label>Username:
+        <input type="text" name="username" required>
+      </label>
+      <label>Email:
+        <input type="email" name="email" required>
+      </label>
+      <label>Password:
+        <input type="password" name="password" required>
+      </label>
+      <label>Confirm Password:
+        <input type="password" name="password2" required>
+      </label>
+      <label>Phone Number 1:
+        <input type="text" name="phone_number_1" required>
+      </label>
+      <label>Phone Number 2:
+        <input type="text" name="phone_number_2" required>
+      </label>
+
+      <!-- Location field (auto-filled) -->
+      <label>Location*<input type="text" name="location" id="location" readonly required></label>
+
+      <!-- Leaflet map -->
+      <div id="map" style="height: 300px; margin-bottom: 10px;"></div>
+      <button type="button" onclick="getLocation()" class = "btn-primary">Choose My Current Location</button>
+      <br><br>
+
+      <label>Role:</label>
+      <label><input type="radio" name="role" value="donor" required> Donor</label>
+      <label><input type="radio" name="role" value="receiver" required> Receiver</label>
+
+      <!-- Hidden Latitude & Longitude -->
+      <input type="hidden" id="latitude" name="latitude">
+      <input type="hidden" id="longitude" name="longitude">
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Initialize map
+  var map = L.map('map').setView([27.7172, 85.3240], 10); // Default to Kathmandu
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  var marker = L.marker([27.7172, 85.3240]).addTo(map);
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        
+        // Update map
+        map.setView([lat, lng], 15);
+        marker.setLatLng([lat, lng]);
+        
+        // Update hidden fields
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+        
+        // Reverse geocode to get address
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('location').value = data.display_name;
+          });
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  // Handle map clicks
+  map.on('click', function(e) {
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    
+    marker.setLatLng([lat, lng]);
+    document.getElementById('latitude').value = lat;
+    document.getElementById('longitude').value = lng;
+    
+    // Reverse geocode
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('location').value = data.display_name;
+      });
+  });
+</script>
+
+{% endblock %}

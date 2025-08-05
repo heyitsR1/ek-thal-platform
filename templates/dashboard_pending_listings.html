@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'admin_dashboard.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+  <div class="admin-header">
+    <h1><i class="fas fa-clock"></i> Pending Listings</h1>
+    <p>Review and approve food donation listings</p>
+  </div>
+
+  {% if pending %}
+    <div class="pending-listings">
+      {% for listing in pending %}
+        <div class="pending-card">
+          <h3>{{ listing.title }}</h3>
+          
+          <div class="meta">
+            <div class="meta-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <div class="meta-label">Location</div>
+                <div class="meta-value">{{ listing.location|truncatechars:30 }}</div>
+              </div>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-weight-hanging"></i>
+              <div>
+                <div class="meta-label">Quantity</div>
+                <div class="meta-value">{{ listing.quantity }} kg</div>
+              </div>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-utensils"></i>
+              <div>
+                <div class="meta-label">Type</div>
+              </div>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-calendar"></i>
+              <div>
+                <div class="meta-label">Prepared</div>
+                <div class="meta-value">{{ listing.prepared_at|date:"M d, Y H:i"|default:"Not specified" }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="description">
+            <strong>Description:</strong><br>
+            {{ listing.description|default:"No description provided" }}
+          </div>
+
+          {% if listing.special_instructions %}
+            <div class="description">
+              <strong>Special Instructions:</strong><br>
+              {{ listing.special_instructions }}
+            </div>
+          {% else %}
+            <div class="description">
+              <strong>Special Instructions:</strong><br>
+              None
+            </div>
+          {% endif %}
+
+          <div class="contact-info">
+            <h4><i class="fas fa-user"></i> Donor Contact Information</h4>
+            <div class="contact-item">
+              <i class="fas fa-user-circle"></i>
+              <span><strong>Name:</strong> {{ listing.donor.user.username }}</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span><strong>Email:</strong> {{ listing.donor.user.email }}</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span><strong>Phone 1:</strong> {{ listing.donor.phone_number_1 }}</span>
+            </div>
+            {% if listing.donor.phone_number_2 %}
+              <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span><strong>Phone 2:</strong> {{ listing.donor.phone_number_2 }}</span>
+              </div>
+            {% endif %}
+            <div class="contact-item">
+              <i class="fas fa-calendar-plus"></i>
+              <span><strong>Submitted:</strong> {{ listing.created_at|date:"M d, Y H:i" }}</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a href="{% url 'dashboard_approve_listing' listing.id %}" class="btn btn-view">
+              <i class="fas fa-eye"></i> Review Details
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="fas fa-check-circle"></i>
+      <h3>No Pending Listings</h3>
+      <p>All food listings have been reviewed and processed.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %} 
