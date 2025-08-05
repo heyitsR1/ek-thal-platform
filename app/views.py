@@ -9,12 +9,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.db.models import Q
 # from .utils import analyze_food_listing_with_gemini
-<<<<<<< HEAD
 from django.http import HttpResponseForbidden, HttpResponse
-=======
-from django.http import HttpResponseForbidden
 import datetime
->>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail
 from django.conf import settings
@@ -51,7 +47,6 @@ def home(request):
         from django.db import connection
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
-<<<<<<< HEAD
         
         # Check if this is a health check request
         user_agent = request.META.get('HTTP_USER_AGENT', '')
@@ -64,11 +59,6 @@ def home(request):
         # For health checks, return error status
         if 'healthcheck' in request.META.get('HTTP_USER_AGENT', '').lower():
             return HttpResponse(f"ERROR: {str(e)}", content_type="text/plain", status=500)
-=======
-        return render(request, 'index.html')
-    except Exception as e:
-        print(f"Database error in home view: {e}")
->>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
         return render(request, 'maintenance.html')
 def about(request):
     return render(request, 'about.html')
@@ -128,10 +118,52 @@ def login_view(request):
     except Exception as e:
         print(f"Database error in login view: {e}")
         return render(request, 'maintenance.html')
-<<<<<<< HEAD
-=======
-    
->>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
+
+def about(request):
+    return render(request, 'about.html')
+def signup(request):
+    return render(request, 'signup.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+@csrf_protect
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        phone_number_1 = request.POST.get('phone_number_1')
+        phone_number_2 = request.POST.get('phone_number_2')
+        is_organization = request.POST.get('is_organization') == 'on'
+        if not (username and password and password2 and email and phone_number_1 and phone_number_2):
+            return render(request, 'register.html', {'error': 'All fields are required.'})
+        if password != password2:
+            return render(request, 'register.html', {'error': 'Passwords do not match.'})
+        if User.objects.filter(username=username).exists():
+            return render(request, 'register.html', {'error': 'Username already exists.'})
+        user = User.objects.create_user(username=username, password=password, email=email)
+        Profile.objects.create(user=user, phone_number_1=phone_number_1, phone_number_2=phone_number_2, is_organization=is_organization)
+        return render(request, 'register.html', {'success': True})
+    return render(request, 'register.html')
+
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'password_reset.html'
+    email_template_name = 'password_reset_email.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'password_reset_done.html'
+
+class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'password_reset_complete.html'
+
+@csrf_protect
+def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
