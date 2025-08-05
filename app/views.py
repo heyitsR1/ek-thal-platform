@@ -9,7 +9,12 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.db.models import Q
 # from .utils import analyze_food_listing_with_gemini
+<<<<<<< HEAD
 from django.http import HttpResponseForbidden, HttpResponse
+=======
+from django.http import HttpResponseForbidden
+import datetime
+>>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail
 from django.conf import settings
@@ -46,6 +51,7 @@ def home(request):
         from django.db import connection
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
+<<<<<<< HEAD
         
         # Check if this is a health check request
         user_agent = request.META.get('HTTP_USER_AGENT', '')
@@ -58,6 +64,11 @@ def home(request):
         # For health checks, return error status
         if 'healthcheck' in request.META.get('HTTP_USER_AGENT', '').lower():
             return HttpResponse(f"ERROR: {str(e)}", content_type="text/plain", status=500)
+=======
+        return render(request, 'index.html')
+    except Exception as e:
+        print(f"Database error in home view: {e}")
+>>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
         return render(request, 'maintenance.html')
 def about(request):
     return render(request, 'about.html')
@@ -117,6 +128,10 @@ def login_view(request):
     except Exception as e:
         print(f"Database error in login view: {e}")
         return render(request, 'maintenance.html')
+<<<<<<< HEAD
+=======
+    
+>>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -476,6 +491,7 @@ def handler500(request, exception=None):
     # Return a simple error response
     return render(request, '500.html', status=500)
 
+<<<<<<< HEAD
 def health_check(request):
     """Simple health check endpoint for Railway"""
     try:
@@ -489,3 +505,30 @@ def health_check(request):
     except Exception as e:
         print(f"Health check failed: {e}")
         return HttpResponse(f"ERROR: {str(e)}", content_type="text/plain", status=500)
+=======
+def test_csrf(request):
+    """Test view to verify CSRF is working"""
+    if request.method == 'POST':
+        return HttpResponse("CSRF test successful!")
+    return render(request, 'test_csrf.html')
+
+def debug_csrf(request):
+    """Debug view to check CSRF token status"""
+    from django.middleware.csrf import get_token
+    
+    # Get the CSRF token
+    csrf_token = get_token(request)
+    
+    # Check if token exists in cookies
+    csrf_cookie = request.COOKIES.get('csrftoken')
+    
+    debug_info = {
+        'csrf_token': csrf_token,
+        'csrf_cookie': csrf_cookie,
+        'method': request.method,
+        'headers': dict(request.headers),
+        'cookies': dict(request.COOKIES),
+    }
+    
+    return HttpResponse(f"<pre>{debug_info}</pre>")
+>>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a

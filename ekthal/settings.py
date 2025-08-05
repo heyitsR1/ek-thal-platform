@@ -60,6 +60,17 @@ LOGGING = {
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.railway.app,.onrender.com,ek-thal.onrender.com').split(',')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.railway.app,https://*.onrender.com,https://ek-thal.onrender.com').split(',')
 
+# CSRF Settings
+CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() == 'true'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+# Session Settings
+SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -86,7 +97,6 @@ MIDDLEWARE = [
 # Add Whitenoise middleware only in production
 if not DEBUG:
     MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-
 ROOT_URLCONF = "ekthal.urls"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
