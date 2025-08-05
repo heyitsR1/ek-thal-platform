@@ -23,10 +23,7 @@ from app import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
-<<<<<<< HEAD
     path("health/", views.health_check, name="health_check"),
-=======
->>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("register/", views.register, name="register"),
@@ -44,18 +41,11 @@ urlpatterns = [
     path("receiver_dashboard/", views.receiver_dashboard, name="receiver_dashboard"),
     path("dashboard/pending-listings/", views.dashboard_pending_listings, name="dashboard_pending_listings"),
     path("dashboard/approve-listing/<int:listing_id>/", views.dashboard_approve_listing, name="dashboard_approve_listing"),
-<<<<<<< HEAD
+    path("test-csrf/", views.test_csrf, name="test_csrf"),
+    path("debug-csrf/", views.debug_csrf, name="debug_csrf"),
 ]
 
 # Serve static and media files in development only
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-=======
-    path("test-csrf/", views.test_csrf, name="test_csrf"),
-    path("debug-csrf/", views.debug_csrf, name="debug_csrf"),
-]
-
-# Serve media files in development only
-if settings.DEBUG:
->>>>>>> b4c8a48ade4829f0e06836e4cb3da3911c17ed0a
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
