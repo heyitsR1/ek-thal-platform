@@ -227,7 +227,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-- **Project Link**: [https://github.com/yourusername/ek-thal](https://github.com/yourusername/ek-thal)
+- **Project Link**: [https://github.com/heyitsR1/ek-thal-platform](https://github.com/heyitsR1/ek-thal-platform)
 - **Live Demo**: [https://ek-thal.onrender.com](https://ek-thal.onrender.com)
 
 ## 🐛 Known Issues
