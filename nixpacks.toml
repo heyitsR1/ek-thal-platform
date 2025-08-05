@@ -1,14 +1,17 @@
 [phases.setup]
-nixPkgs = ["python311", "python311Packages.pip"]
+nixPkgs = ["python311", "python311Packages.pip", "python311Packages.virtualenv"]
 
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = [
+  "python -m venv venv",
+  "source venv/bin/activate && pip install -r requirements.txt"
+]
 
 [phases.build]
 cmds = [
-  "python manage.py collectstatic --no-input",
-  "python manage.py migrate --noinput"
+  "source venv/bin/activate && python manage.py collectstatic --no-input",
+  "source venv/bin/activate && python manage.py migrate --noinput"
 ]
 
 [start]
-cmd = "chmod +x start.sh && ./start.sh" 
+cmd = "source venv/bin/activate && chmod +x start.sh && ./start.sh" 

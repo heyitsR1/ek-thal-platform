@@ -2,6 +2,12 @@
 
 echo "Starting EkThal application..."
 
+# Activate virtual environment if it exists
+if [ -d "venv" ]; then
+    source venv/bin/activate
+    echo "Activated virtual environment"
+fi
+
 # Wait a moment for database to be ready
 sleep 5
 
