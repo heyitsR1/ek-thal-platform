@@ -11,9 +11,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}EkThal - Food Donation Platform{% endblock %}</title>
     
+    <style>
+      /* Universal background for pages without their own backgrounds */
+        body {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        }
+      /* body {
+        background: url("{% static 'primary_bg.png' %}") no-repeat center center fixed !important;
+        background-size: cover !important;
+        position: relative;
+        filter: blur(3px);
+      } */
+      
+      /* Add a subtle overlay to make content more readable */
+      /* body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: -1;
+        pointer-events: none;
+      } */
+        body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        background: url("{% static 'primary_bg_2.png' %}") no-repeat center center fixed;
+        background-size: cover;
+        filter: blur(5px);
+        z-index: -1;
+        }
+      
+      /* Exclude pages that already have their own backgrounds */
+      body.has-custom-bg {
+        background: none !important;
+        filter: none !important;
+      }
+      
+      body.has-custom-bg::before {
+        display: none;
+      }
+    </style>
+    
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    {% block navbar %}
     <header class="navbar">
         <div class="logo">
             <img src="{% static 'Logo.png' %}" alt="EkThal Logo" style="height: 120px; width: auto; margin-top: 40px;">
@@ -40,6 +91,7 @@
             {% endif %}
         </nav>
     </header>
+    {% endblock %}
 
     <div class="messages">
         {% if messages %}
@@ -52,7 +104,7 @@
         {% block content %}{% endblock content %}
     </main>
     <footer>
-        &copy; {% now "Y" %} EkThal &mdash; Spreading Smiles, Not Waste.
+        &copy; {% now "Y" %} EkThal &mdash; Spreading Smiles, A Plate At A Time.
     </footer>
     {% block extra_scripts %}{% endblock %}
 </body>

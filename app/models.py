@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+import uuid
+from datetime import datetime
 
 
 class Profile(models.Model):
@@ -57,3 +58,32 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.rater.user.username} rated {self.ratee.user.username} ({self.score})"
+
+class Certificate(models.Model):
+    """Model to track donation certificates issued to donors"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='certificates')
+    food_listing = models.ForeignKey(FoodListing, on_delete=models.CASCADE)
+    issued_at = models.DateTimeField(auto_now_add=True)
+    certificate_number = models.CharField(max_length=20, unique=True)
+    
+    def __str__(self):
+        return f"Certificate {self.certificate_number} - {self.donor.user.username}"
+    
+    def save(self, *args, **kwargs):
+        if not self.certificate_number:
+            # Generate certificate number: EK-YYYY-XXXX
+            year = self.issued_at.year if self.issued_at else datetime.now().year
+            last_cert = Certificate.objects.filter(
+                certificate_number__startswith=f'EK-{year}-'
+            ).order_by('-certificate_number').first()
+            
+            if last_cert:
+                last_num = int(last_cert.certificate_number.split('-')[-1])
+                new_num = last_num + 1
+            else:
+                new_num = 1
+                
+            self.certificate_number = f'EK-{year}-{new_num:04d}'
+        
+        super().save(*args, **kwargs)

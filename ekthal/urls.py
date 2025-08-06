@@ -43,6 +43,7 @@ urlpatterns = [
     path("dashboard/approve-listing/<int:listing_id>/", views.dashboard_approve_listing, name="dashboard_approve_listing"),
     path("test-csrf/", views.test_csrf, name="test_csrf"),
     path("debug-csrf/", views.debug_csrf, name="debug_csrf"),
+    path("certificate/<int:listing_id>/", views.generate_certificate, name="generate_certificate"),
 ]
 
 # Serve static and media files in development only

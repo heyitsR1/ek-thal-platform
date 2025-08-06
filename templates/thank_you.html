@@ -235,6 +235,49 @@
         .social-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .social-btn.linkedin { background: #0077B5; }
 
+        /* Certificate Section Styles */
+        .certificate-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 16px;
+            border: 2px solid #f59e0b;
+            text-align: center;
+        }
+
+        .certificate-section .message {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .btn-certificate {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-certificate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+
+        .certificate-note {
+            color: #92400e;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            opacity: 0.8;
+        }
+
         .floating-elements {
             position: absolute;
             top: 0;
@@ -380,6 +423,18 @@
                     </a>
                 </div>
             </div>
+
+            {% if listing %}
+            <div class="certificate-section">
+                <p class="message">🎖️ Get your donation certificate!</p>
+                <div class="certificate-button">
+                    <a href="{% url 'generate_certificate' listing.id %}" class="btn btn-certificate" target="_blank">
+                        🎨 View Certificate
+                    </a>
+                </div>
+                <p class="certificate-note">View your beautiful certificate and download it from your browser!</p>
+            </div>
+            {% endif %}
 
             <div class="social-sharing">
                 <p class="social-text">Share your good deed and inspire others:</p>

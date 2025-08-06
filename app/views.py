@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import FoodListing, Profile, ClaimedListing, Rating
+from .models import FoodListing, Profile, ClaimedListing, Rating, Certificate
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -16,6 +16,17 @@ from django.core.mail import send_mail
 from django.conf import settings
 import math
 from .email_notifications import email_notifier
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from io import BytesIO
+import os
+from PIL import Image as PILImage, ImageDraw, ImageFont
+import requests
 
 
 
@@ -244,13 +255,25 @@ def food_listing_form(request):
             email_notifier.send_admin_new_listing_notification(listing)
         except Exception as e:
             print(f"Email notification failed: {e}")
+        
+        # Store the listing ID in session for the thank you page
+        request.session['last_donation_id'] = listing.id
         return redirect('thank_you')
     # Prefill form fields
     return render(request, 'food_listing_form.html', {'profile': profile})
 
 # Thank you page after submission
 def thank_you(request):
-    return render(request, 'thank_you.html')
+    listing = None
+    listing_id = request.session.get('last_donation_id')
+    if listing_id:
+        try:
+            listing = FoodListing.objects.get(id=listing_id)
+            # Clear the session data after retrieving it
+            del request.session['last_donation_id']
+        except FoodListing.DoesNotExist:
+            pass
+    return render(request, 'thank_you.html', {'listing': listing})
 
 def listing_detail(request, listing_id):
     listing = get_object_or_404(FoodListing, id=listing_id)
@@ -562,3 +585,219 @@ def debug_csrf(request):
     }
     
     return HttpResponse(f"<pre>{debug_info}</pre>")
+
+@login_required
+def generate_certificate(request, listing_id):
+    """Generate a donation certificate for the donor using Canva template"""
+    # Get the food listing
+    food_listing = get_object_or_404(FoodListing, id=listing_id)
+    
+    # Check if user is the donor
+    if request.user != food_listing.donor.user:
+        return HttpResponseForbidden("You can only generate certificates for your own donations.")
+    
+    # Check if certificate already exists
+    certificate, created = Certificate.objects.get_or_create(
+        donor=food_listing.donor,
+        food_listing=food_listing
+    )
+    
+    try:
+        # Load the certificate template
+        template_path = os.path.join(settings.BASE_DIR, 'static', 'certificate.png')
+        if not os.path.exists(template_path):
+            # Fallback to staticfiles directory
+            template_path = os.path.join(settings.STATIC_ROOT or settings.STATICFILES_DIRS[0], 'certificate.png')
+        
+        # Open the template image
+        template_img = PILImage.open(template_path)
+        
+        # Create a copy to work with
+        certificate_img = template_img.copy()
+        
+        # Lighten the background if it's too dark
+        # Convert to RGB if needed
+        if certificate_img.mode != 'RGB':
+            certificate_img = certificate_img.convert('RGB')
+        
+        # Apply a lightening effect to make the background less dark
+        from PIL import ImageEnhance
+        enhancer = ImageEnhance.Brightness(certificate_img)
+        certificate_img = enhancer.enhance(1.3)  # Increase brightness by 30%
+        
+        draw = ImageDraw.Draw(certificate_img)
+        
+        # Try to load Pinyon Script font, fallback to default if not available
+        try:
+            # Load the Pinyon Script font from static directory
+            font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'PinyonScript-Regular.ttf')
+            if not os.path.exists(font_path):
+                # Fallback to system font
+                font = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 48)  # macOS fallback
+            else:
+                font = ImageFont.truetype(font_path, 48)
+        except Exception as font_error:
+            print(f"Font loading error: {font_error}")
+            # If font loading fails, use default
+            font = ImageFont.load_default()
+        
+        # Get donor name
+        donor_name = food_listing.donor.user.get_full_name() or food_listing.donor.user.username
+        
+        # Calculate text position (center of the image)
+        img_width, img_height = certificate_img.size
+        text_bbox = draw.textbbox((0, 0), donor_name, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+        
+        # Position text in the center with better spacing
+        x = (img_width - text_width) // 2
+        y = img_height // 2 - 80  # Move up a bit more for better positioning
+        
+        # Draw the donor name with the specified color
+        donor_color = (166, 123, 38)  # #a67b26 in RGB
+        draw.text((x, y), donor_name, font=font, fill=donor_color)
+        
+        # Add certificate number (smaller font) with more spacing
+        try:
+            small_font = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 20)  # Slightly smaller font
+        except Exception as small_font_error:
+            print(f"Small font loading error: {small_font_error}")
+            small_font = ImageFont.load_default()
+        
+        cert_text = f"Certificate #{certificate.certificate_number}"
+        cert_bbox = draw.textbbox((0, 0), cert_text, font=small_font)
+        cert_width = cert_bbox[2] - cert_bbox[0]
+        cert_x = (img_width - cert_width) // 2
+        cert_y = y + text_height + 80  # Much more spacing between name and certificate number
+        
+        draw.text((cert_x, cert_y), cert_text, font=small_font, fill=(80, 80, 80))  # Slightly darker gray
+        
+        # Convert to bytes
+        img_buffer = BytesIO()
+        certificate_img.save(img_buffer, format='PNG')
+        img_buffer.seek(0)
+        
+        # Create HTTP response - display in browser instead of download
+        response = HttpResponse(img_buffer.getvalue(), content_type='image/png')
+        response['Content-Disposition'] = f'inline; filename="donation_certificate_{certificate.certificate_number}.png"'
+        
+        return response
+        
+    except Exception as e:
+        print(f"Certificate generation error: {e}")
+        # Fallback to PDF generation if image processing fails
+        return generate_pdf_certificate(food_listing, certificate)
+
+def generate_pdf_certificate(food_listing, certificate):
+    """Fallback PDF certificate generation"""
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    story = []
+    
+    # Get styles
+    styles = getSampleStyleSheet()
+    
+    # Create custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=24,
+        textColor=colors.HexColor('#439249'),
+        alignment=TA_CENTER,
+        spaceAfter=30,
+        fontName='Helvetica-Bold'
+    )
+    
+    subtitle_style = ParagraphStyle(
+        'CustomSubtitle',
+        parent=styles['Heading2'],
+        fontSize=16,
+        textColor=colors.HexColor('#166534'),
+        alignment=TA_CENTER,
+        spaceAfter=20,
+        fontName='Helvetica'
+    )
+    
+    body_style = ParagraphStyle(
+        'CustomBody',
+        parent=styles['Normal'],
+        fontSize=12,
+        textColor=colors.black,
+        alignment=TA_CENTER,
+        spaceAfter=15,
+        fontName='Helvetica'
+    )
+    
+    # Add certificate content
+    story.append(Paragraph("CERTIFICATE OF DONATION", title_style))
+    story.append(Spacer(1, 20))
+    
+    # Add decorative line
+    story.append(Paragraph("=" * 50, body_style))
+    story.append(Spacer(1, 30))
+    
+    # Certificate text
+    certificate_text = f"""
+    This is to certify that
+    
+    <b>{food_listing.donor.user.get_full_name() or food_listing.donor.user.username}</b>
+    
+    has generously donated food to help reduce waste and feed those in need through the Ek Thaal platform.
+    """
+    
+    story.append(Paragraph(certificate_text, body_style))
+    story.append(Spacer(1, 30))
+    
+    # Donation details
+    details_text = f"""
+    <b>Donation Details:</b><br/>
+    • Food Item: {food_listing.title}<br/>
+    • Quantity: {food_listing.quantity} kg<br/>
+    • Location: {food_listing.location}<br/>
+    • Date: {food_listing.created_at.strftime('%B %d, %Y')}<br/>
+    • Certificate Number: {certificate.certificate_number}
+    """
+    
+    story.append(Paragraph(details_text, body_style))
+    story.append(Spacer(1, 30))
+    
+    # Impact statement
+    impact_text = """
+    <b>Your Impact:</b><br/>
+    By donating surplus food, you have helped reduce food waste and provided nourishment to those in need. 
+    Your generosity contributes to building a more sustainable and caring community.
+    """
+    
+    story.append(Paragraph(impact_text, body_style))
+    story.append(Spacer(1, 40))
+    
+    # Thank you message
+    thank_you_text = """
+    <b>Thank you for your kindness and commitment to making a difference!</b>
+    """
+    
+    story.append(Paragraph(thank_you_text, subtitle_style))
+    story.append(Spacer(1, 30))
+    
+    # Footer
+    footer_text = f"""
+    Issued on: {certificate.issued_at.strftime('%B %d, %Y')}<br/>
+    Ek Thaal - Connecting surplus meals to empty plates across Nepal
+    """
+    
+    story.append(Paragraph(footer_text, body_style))
+    
+    # Build PDF
+    doc.build(story)
+    
+    # Get PDF content
+    pdf_content = buffer.getvalue()
+    buffer.close()
+    
+    # Create HTTP response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="donation_certificate_{certificate.certificate_number}.pdf"'
+    response.write(pdf_content)
+    
+    return response

@@ -2,17 +2,8 @@
 {% load static %}
 {% block extra_head %}
 <style>
-
+  /* Exclude universal background for food listing form page */
   body {
-    margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    padding: 0;
-    /* Add the background image with high specificity */
     background: url("{% static 'donation-bg.png' %}") no-repeat center center fixed !important;
     background-size: cover !important;
     background-color: transparent !important;

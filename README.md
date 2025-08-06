@@ -16,6 +16,7 @@ Ek Thaal is a community-driven food sharing platform that connects those with su
 - **Location Services**: Use GPS coordinates for precise location tracking
 - **Recurring Donations**: Set up regular food donations
 - **Special Instructions**: Add dietary restrictions or handling notes
+- **Donation Certificates**: Get printable certificates for your donations to inspire others
 
 ### For Food Receivers (Organizations)
 - **Browse Available Food**: View all approved food listings in your area
@@ -29,6 +30,17 @@ Ek Thaal is a community-driven food sharing platform that connects those with su
 - **Email Notifications**: Automated notifications for new listings and claims
 - **User Management**: Manage donors and receiver organizations
 - **Analytics Dashboard**: Track platform usage and impact
+- **Certificate Management**: Track and manage donation certificates
+
+## 🎖️ Donation Certificates
+
+After making a donation, donors receive a beautiful, printable certificate that includes:
+- **Personalized Details**: Donor name, food item, quantity, and location
+- **Unique Certificate Number**: Trackable certificate with format EK-YYYY-XXXX
+- **Impact Statement**: Highlights the positive impact of their donation
+- **Professional Design**: Beautiful PDF format perfect for printing and sharing
+
+Certificates help incentivize donations and provide donors with a tangible reminder of their contribution to the community.
 
 ## 🚀 Live Demo
 

@@ -11,6 +11,15 @@
     <link rel="stylesheet" href="{% static 'contact.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+      /* Exclude universal background for contact page */
+      body {
+        background: none !important;
+      }
+      body::before {
+        display: none !important;
+      }
+    </style>
+    <style>
         body {
             background: #f8f6f0 url("{% static 'bg.svg' %}") repeat top left;
             background-size: 600px 600px;
@@ -47,10 +56,35 @@
         @media (max-width: 600px) {
             .contact-bg-hands, .contact-bg-plate, .contact-bg-kindness { display: none; }
         }
-        .contact-hero, .map-section, .faq-section, .footer-section { 
-            position: relative; 
-            z-index: 2; 
-        }
+                 .contact-hero, .map-section, .faq-section, .footer-section { 
+             position: relative; 
+             z-index: 2; 
+         }
+         
+         /* Mobile responsive navbar */
+         @media (max-width: 768px) {
+             .navbar {
+                 padding: 0.5rem 1rem;
+                 min-height: 50px;
+             }
+             
+             .navbar nav {
+                 gap: 0.5rem;
+                 flex-wrap: wrap;
+                 justify-content: center;
+             }
+             
+             .navbar nav a {
+                 padding: 0.3rem 0.6rem;
+                 font-size: 0.8rem;
+             }
+             
+             .navbar nav .logout-link {
+                 padding: 0.3rem 0.6rem;
+                 font-size: 0.75rem;
+                 gap: 0.2rem;
+             }
+         }
     </style>
 </head>
 <body>
