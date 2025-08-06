@@ -52,7 +52,7 @@ class WhatsAppNotifier:
 👤 Donor: {listing.donor.user.username}
 📞 Contact: {listing.donor.phone_number_1}
 
-🔗 Review: http://127.0.0.1:8000/dashboard/approve-listing/{listing.id}/
+🔗 Review: https://ekthal.up.railway.app/dashboard/approve-listing/{listing.id}/
 
 ⚠️ Please review and approve/reject this listing."""
         
@@ -70,7 +70,7 @@ class WhatsAppNotifier:
 ⚖️ {listing.quantity} kg
 ⏰ Prepared: {listing.prepared_at.strftime('%Y-%m-%d %H:%M') if listing.prepared_at else 'N/A'}
 
-🔗 View: http://127.0.0.1:8000/listing/{listing.id}/
+🔗 View: https://ekthal.up.railway.app/listing/{listing.id}/
 
 🚨 Food spoils quickly - claim fast!"""
         
@@ -96,7 +96,7 @@ class WhatsAppNotifier:
 
 🎉 Your food listing is now visible to receivers and can be claimed!
 
-🔗 View: http://127.0.0.1:8000/listing/{listing.id}/"""
+🔗 View: https://ekthal.up.railway.app/listing/{listing.id}/"""
         
         return self.send_message(donor_phone, message)
     

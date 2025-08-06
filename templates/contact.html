@@ -15,6 +15,7 @@
             background: #f8f6f0 url("{% static 'bg.svg' %}") repeat top left;
             background-size: 600px 600px;
         }
+        
         .contact-bg-illustration {
             position: fixed;
             z-index: 0;
@@ -46,12 +47,17 @@
         @media (max-width: 600px) {
             .contact-bg-hands, .contact-bg-plate, .contact-bg-kindness { display: none; }
         }
-        .contact-hero, .map-section, .faq-section, .footer-section { position: relative; z-index: 2; }
+        .contact-hero, .map-section, .faq-section, .footer-section { 
+            position: relative; 
+            z-index: 2; 
+        }
     </style>
 </head>
 <body>
   <header class="navbar">
-    <div class="logo">EkThal</div>
+    <div class="logo">
+        <img src="{% static 'Logo.png' %}" alt="EkThal Logo" style="height: 120px; width: auto; margin-top: 40px;">
+    </div>
     <nav>
         <a href="/">Home</a>
         <a href="/about/">About</a>

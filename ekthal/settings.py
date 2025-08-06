@@ -57,8 +57,8 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.railway.app,.onrender.com,ek-thal.onrender.com').split(',')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.railway.app,https://*.onrender.com,https://ek-thal.onrender.com').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,.railway.app,ekthal.up.railway.app').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://127.0.0.1,https://localhost,https://*.railway.app,https://ekthal.up.railway.app').split(',')
 
 # CSRF Settings
 CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() == 'true'
@@ -197,7 +197,7 @@ STATICFILES_FINDERS = [
 ]
 
 # Site URL for email notifications
-SITE_URL = os.environ.get('SITE_URL', 'https://ek-thal.onrender.com')
+SITE_URL = os.environ.get('SITE_URL', 'https://ekthal.up.railway.app')
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'

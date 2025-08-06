@@ -15,7 +15,9 @@
 </head>
 <body>
     <header class="navbar">
-        <div class="logo" style="color:white;">EkThal</div>
+        <div class="logo">
+            <img src="{% static 'Logo.png' %}" alt="EkThal Logo" style="height: 120px; width: auto; margin-top: 40px;">
+        </div>
         <nav>
             <a href="/">Home</a>
             <a href="/about/">About</a>
@@ -38,6 +40,7 @@
             {% endif %}
         </nav>
     </header>
+
     <div class="messages">
         {% if messages %}
             {% for message in messages %}

@@ -32,7 +32,7 @@ Ek Thaal is a community-driven food sharing platform that connects those with su
 
 ## 🚀 Live Demo
 
-Visit our live application: [Ek Thaal on Render](https://ek-thal.onrender.com)
+Visit our live application: [Ek Thaal on Railway](https://ekthal.up.railway.app)
 
 ## 🛠️ Technology Stack
 
@@ -228,7 +228,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact
 
 - **Project Link**: [https://github.com/heyitsR1/ek-thal-platform](https://github.com/heyitsR1/ek-thal-platform)
-- **Live Demo**: [https://ek-thal.onrender.com](https://ek-thal.onrender.com)
+- **Live Demo**: [https://ekthal.up.railway.app](https://ekthal.up.railway.app)
 
 ## 🐛 Known Issues
 
