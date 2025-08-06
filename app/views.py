@@ -26,7 +26,6 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from io import BytesIO
 import os
 from PIL import Image as PILImage, ImageDraw, ImageFont
-import requests
 
 
 
